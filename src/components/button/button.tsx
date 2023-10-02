@@ -1,0 +1,1 @@
+import React, {ChangeEvent, FormEvent, ReactElement, useEffect, useState}  from 'react';import './button.scss'export default function Button(): ReactElement {	return (		<button type="button" className={'button'}>			Войти		</button>	)}
