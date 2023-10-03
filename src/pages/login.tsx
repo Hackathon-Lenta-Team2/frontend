@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, ReactElement, useEffect, useState}  from 'react';
+import React, {ChangeEvent, FormEvent, ReactElement, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Button from "../components/button/button.tsx";
 import './login.scss'
@@ -29,8 +29,8 @@ export default function LoginPage(): ReactElement {
 			<form name="loginForm">
 				<EmailInput />
 				<PasswordInput />
-				<Checkbox />
-				<Button></Button>
+				<Checkbox>Запомнить меня</Checkbox>
+				<Button>Войти</Button>
 			</form>
 		</div>
 	)

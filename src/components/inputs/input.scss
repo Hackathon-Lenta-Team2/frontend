@@ -30,13 +30,33 @@ $successcolor: #14AE5C;
 	}
 }
 
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type=number] {
+	-moz-appearance:textfield;
+}
+
 .label {
 	display: block;
 	width: 100%;
+	min-width: 438px;
 	font-size: 14px;
 	color: $defaulcolor;
 	margin-bottom: 40px;
 	padding-left: 20px;
+}
+
+.filter-header {
+	font-size: 14px;
+	color: $defaulcolor;
+	padding-left: 20px;
+}
+
+.container {
+	margin-bottom: 40px;
 }
 
 .message {
@@ -50,3 +70,11 @@ $successcolor: #14AE5C;
 		color: $successcolor;
 	}
 }
+
+.placeholder {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+

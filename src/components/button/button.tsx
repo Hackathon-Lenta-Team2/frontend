@@ -1,1 +1,1 @@
-import React, {ChangeEvent, FormEvent, ReactElement, useEffect, useState}  from 'react';import './button.scss'export default function Button(): ReactElement {	return (		<button type="button" className={'button'}>			Войти		</button>	)}
+import React, {ReactElement} from 'react';import './button.scss'export default function Button({ type, children }): ReactElement {	let className = 'button '	if (type === 'secondary') {		className += 'button_secondary'	}	return (		<button type="button" className={className}>			{children}		</button>	)}
