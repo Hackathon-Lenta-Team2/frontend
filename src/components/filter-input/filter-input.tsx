@@ -6,8 +6,9 @@ import searchIcon from "../../images/search-icon.svg";
 import downIcon from "../../images/indicator-icon-down.svg";
 import upIcon from "../../images/indicator-icon-up.svg";
 import deleteIcon from "../../images/multi-val-delete-icon.svg";
-import './input.scss'
+import '../input.scss'
 
+// тестовые данные просто для проверки отображения, потом добавлю реальные
 const colourOptions = [
 	{ value: "ocean1", label: "Ocean" },
 	{ value: "blue", label: "Blue" },
@@ -21,7 +22,7 @@ const colourOptions = [
 	{ value: "silver", label: "Silver" }
 ];
 
-const colourStyles = {
+const colourStyles: any = {
 	control: (styles) => ({
 		...styles,
 		backgroundColor: '#F0FBFF',
@@ -29,13 +30,16 @@ const colourStyles = {
 		borderRadius: 0,
 		padding: '0 16px 0 8px',
 		height: '56px',
-		boxShadow: 'none'
+		boxShadow: 'none',
+		borderBottom: '1px solid #003C96',
 	}),
+
 	placeholder: (styles) => ({
 		...styles,
 		color: '#003C96',
 		fontSize: '20px'
 	}),
+
 	indicatorSeparator: (styles) => ({
 		...styles,
 		backgroundColor: 0,
@@ -62,15 +66,9 @@ const colourStyles = {
 		...styles,
 		backgroundColor: '#F0FBFF',
 		color: 'black',
-		':hover': {
-			boxShadow: '0 0 10px #173C9126'
+		':active': {
+			backgroundColor: 'transparent'
 		}
-	}),
-
-	input: (styles, { isSelected }) => ({
-		...styles,
-/*		borderBottom: isSelected ? 0 : '1px solid #003C96',*/
-
 	}),
 
 	multiValue: (styles) => ({
@@ -89,13 +87,24 @@ const colourStyles = {
 		}
 	}),
 
+	input: (styles) => ({
+		...styles,
+		fontSize: '20px',
+	})
 }
 
-const placeholderElement =
-	(<div className={'placeholder'}>
-			<img src={searchIcon} alt="Поиск" width="18px" height="18px"></img>
-			<span>Номер ТК</span>
-		</div>)
+const Placeholder = props => {
+	const {selectProps} = props;
+	const {menuIsOpen} = selectProps;
+	return (
+		<components.Placeholder {...props}>
+			<div className={'placeholder'}>
+				<img src={searchIcon} alt="Поиск" width="18px" height="18px"></img>
+				{/*{ !menuIsOpen && (<span>Номер ТК</span>)}*/}
+			</div>
+		</components.Placeholder>
+	)
+}
 
 const MySelect = props => {
 		return (
@@ -104,7 +113,6 @@ const MySelect = props => {
 				options={[...props.options]}
 				onChange={selected => props.onChange(selected)}
 				styles={colourStyles}
-				placeholder={placeholderElement}
 			/>
 		);
 };
@@ -113,14 +121,8 @@ const Option = props => {
 	return (
 		<div>
 			<components.Option {...props}>
-				{/*<input
-					type="checkbox"
-					checked={props.isSelected}
-					onChange={() => null}
-				/>{" "}
-				<label>{props.label}</label>*/}
-
-				<label className={'checkbox'}>
+			<div className={'option-container'}>
+				<label className={'checkbox-filter'}>
 					<input className={'checkbox_real'}
 								 type="checkbox"
 								 name="loginSave"
@@ -130,6 +132,7 @@ const Option = props => {
 					<span className={'checkbox_fake'}></span>
 					<label>{props.label}</label>
 				</label>
+			</div>
 			</components.Option>
 		</div>
 	);
@@ -152,21 +155,17 @@ const ClearIndicator = props => {
 };
 
 const DropdownIndicator = props => {
-
-	const [ isIconDown, setDownIcon ] = useState(true);
-	function changeDropdownIcon() {
-		setDownIcon(!isIconDown)
-	}
-
+	const {selectProps} = props;
+	const {menuIsOpen} = selectProps;
 	return (
 		<>
-			{ isIconDown ? (
+			{ menuIsOpen ? (
 				<components.DropdownIndicator {...props}>
-					<img src={downIcon} alt="Раскрыть" onClick={changeDropdownIcon}></img>
+					<img src={upIcon} alt="Раскрыть"></img>
 				</components.DropdownIndicator>
 				) : (
 				<components.DropdownIndicator {...props}>
-					<img src={upIcon} alt="Скрыть" onClick={changeDropdownIcon}></img>
+					<img src={downIcon} alt="Скрыть"></img>
 				</components.DropdownIndicator>
 				)
 			}
@@ -182,27 +181,24 @@ const MultiValue = props => (
 
 const animatedComponents = makeAnimated();
 
-export default function FilterInput(): ReactElement {
-
+export default function FilterInput({children}): ReactElement {
 	const [ selectedOption, setSelectedOption ] = useState(null);
 	function handleChange(selected) {
 		setSelectedOption(selected)
 	}
 	return (
-		<div className={'container'}>
-			<span className={'filter-header'}>Номер ТК</span>
+		<div className={'filter-container'}>
+			<span className={'filter-header'}>{children}</span>
 			<MySelect
 				options={colourOptions}
 				isMulti
 				closeMenuOnSelect={false}
 				hideSelectedOptions={false}
-				components={{ Option, MultiValue, MultiValueRemove, DropdownIndicator, ClearIndicator, animatedComponents }}
+				components={{ Option, MultiValue, MultiValueRemove, DropdownIndicator, ClearIndicator, Placeholder, animatedComponents }}
 				onChange={handleChange}
 				value={selectedOption}
 			/>
 		</div>
 
 	)
-
-
 }

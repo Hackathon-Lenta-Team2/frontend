@@ -1,7 +1,7 @@
 .checkbox {
-	display: block;
+	display: inline-block;
 	position: relative;
-	margin: 20px 0 40px 30px;
+	margin: 0 0 40px 30px;
 	cursor: pointer;
 	font-size: 20px;
 	-webkit-user-select: none;
@@ -55,4 +55,23 @@
 		-ms-transform: rotate(45deg);
 		transform: rotate(45deg);
 	}
+}
+
+.checkbox-filter {
+	display: block;
+	position: relative;
+	height: 34px;
+	margin: 0 0 0 30px;
+	cursor: pointer;
+	font-size: 20px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	color: #2C2A29;
+	text-align: left;
+}
+
+.option-container:hover {
+	box-shadow: 0 0 10px #173C9126;
 }
