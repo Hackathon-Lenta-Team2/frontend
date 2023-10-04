@@ -60,7 +60,8 @@ $successcolor: #14AE5C;
 }
 
 .input:focus ~ .floating-label,
-.input:not(:focus):valid ~ .floating-label {
+.label-on-top
+  /*.input:not(:focus):valid ~ .floating-label*/ {
 	top: -23px;
 	bottom: 10px;
 	left: 20px;
@@ -129,6 +130,7 @@ input[type=number] {
   display: block;
 	font-size: 14px;
   padding-top: 4px;
+  min-height: 20px;
 
 	&__error {
 		color: $errorcolor;
