@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {ReactElement} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 export default function NotFound404(): ReactElement {
   const navigate = useNavigate();
