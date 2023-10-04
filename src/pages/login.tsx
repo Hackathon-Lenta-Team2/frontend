@@ -8,7 +8,7 @@ import Checkbox from "../components/checkbox/chechbox.tsx";
 export default function LoginPage(): ReactElement {
 
   const [ isEmailValidated, setEmailValidation ] = useState(true);
-  let emailErrorMessage = ' '
+  let emailErrorMessage = ' ';
   function checkValidation(e) {
     console.log(e.target.validity.valid);
     if (!e.target.validity.valid) {
@@ -17,6 +17,7 @@ export default function LoginPage(): ReactElement {
       emailErrorMessage = e.target.validationMessage;
     } else {
       setEmailValidation(true);
+      let emailErrorMessage = ' ';
     }
   }
 
@@ -25,7 +26,7 @@ export default function LoginPage(): ReactElement {
 			<h2 className={'login__header'}>Войти</h2>
 			<form name="loginForm">
 				<div className={'input-container'}>
-					<input className={'input'} type="email" name="loginEmail" required minLength="2" maxLength="40" onChange={checkValidation}></input>
+					<input className={'input ' + (!isEmailValidated && 'input__error' || '')} type="email" name="loginEmail" required minLength="2" maxLength="40" onChange={checkValidation}></input>
 					<label className={'floating-label'}>Электронная почта</label>
 					<span className={'message ' + (!isEmailValidated && 'message__error' || '')}>{emailErrorMessage}</span>
 				</div>
