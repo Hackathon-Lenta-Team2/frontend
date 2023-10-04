@@ -1,9 +1,10 @@
 .login {
 	padding-top: 80px;
-	min-width: 900px;
+	width: 900px;
 	display: flex;
 	flex-direction: column;
 	text-align: left;
+  margin: auto;
 
 	&__header {
 		text-align: left;
