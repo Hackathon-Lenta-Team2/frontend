@@ -19,6 +19,7 @@ const Styles = styled.div`
 		}
 `;
 
+// TODO: date validation?
 export default function ActualFilters(): ReactElement {
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());

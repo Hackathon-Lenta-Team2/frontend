@@ -10,7 +10,7 @@ import '../input.scss'
 
 // тестовые данные просто для проверки отображения, потом добавлю реальные
 const colourOptions = [
-	{ value: "ocean1", label: "Ocean" },
+	{ value: "ocean1", label: "OceanOceanOceanOceanOceanOcean" },
 	{ value: "blue", label: "Blue" },
 	{ value: "purple", label: "Purple" },
 	{ value: "red", label: "Red" },
@@ -76,6 +76,7 @@ const colourStyles: any = {
 		backgroundColor: 'white',
 		borderRadius: 0,
 		boxShadow: '0 0 10px #173C9126',
+    maxWidth: '140px'
 	}),
 
 	multiValueRemove: (styles) => ({
@@ -100,7 +101,7 @@ const Placeholder = props => {
 		<components.Placeholder {...props}>
 			<div className={'placeholder'}>
 				<img src={searchIcon} alt="Поиск" width="18px" height="18px"></img>
-				{/*{ !menuIsOpen && (<span>Номер ТК</span>)}*/}
+				{ !menuIsOpen && (<span>12321fsa-fgh345-daj3</span>)}
 			</div>
 		</components.Placeholder>
 	)
