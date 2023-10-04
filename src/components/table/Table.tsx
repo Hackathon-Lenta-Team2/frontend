@@ -1,9 +1,12 @@
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
 import { useTable, Column } from 'react-table';
 import * as forecastData from '../../utils/mock-forecast.json';
 
 export default function Table(): ReactElement {
   const data = useMemo(() => forecastData.data, []);
+  const [currentPage, setCurrentPage] = useState(0);
+  const columnsPerPage = 7; // Number of columns to display per page
+
   const columns: Column[] = useMemo(() => {
     if (data.length === 0) return [];
 
@@ -20,20 +23,49 @@ export default function Table(): ReactElement {
       },
     ];
 
-    const forecastColumns: Column[] = forecastKeys.map((key) => ({
-      Header: key,
-      accessor: `forecast.${key}`,
-    }));
+    const startIndex = currentPage * columnsPerPage;
+    const endIndex = startIndex + columnsPerPage;
+
+    const forecastColumns: Column[] = forecastKeys
+      .slice(startIndex, endIndex) // Slice columns based on the current page
+      .map((key) => ({
+        Header: key,
+        accessor: `forecast.${key}`,
+      }));
 
     return columnsArray.concat(forecastColumns);
-  }, [data]);
+  }, [data, currentPage]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
+  const nextPage = () => {
+    if (currentPage < Math.ceil(columns.length / columnsPerPage) - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     /* eslint-disable react/jsx-props-no-spreading */
     <div>
+      <button onClick={prevPage} disabled={currentPage === 0} type='button'>
+        Previous
+      </button>
+      <button
+        onClick={nextPage}
+        disabled={
+          currentPage === Math.ceil(columns.length / columnsPerPage) - 1
+        }
+        type='button'
+      >
+        Next
+      </button>
       <table {...getTableProps()} className='table'>
         <thead>
           {headerGroups.map((headerGroup) => {
