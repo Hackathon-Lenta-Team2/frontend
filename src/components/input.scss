@@ -3,7 +3,7 @@ $errorcolor: #B9002B;
 $successcolor: #14AE5C;
 
 .number-input {
-	margin-top: 50px;
+	margin-top: 45px;
 }
 
 .input-container {
@@ -60,8 +60,7 @@ $successcolor: #14AE5C;
 }
 
 .input:focus ~ .floating-label,
-.label-on-top
-  /*.input:not(:focus):valid ~ .floating-label*/ {
+.input:not(:focus) ~ .label-on-top {
 	top: -23px;
 	bottom: 10px;
 	left: 20px;
@@ -145,4 +144,5 @@ input[type=number] {
 	display: flex;
 	align-items: center;
 	gap: 8px;
+  color: #D3D3D3
 }

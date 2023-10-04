@@ -71,8 +71,11 @@
 	user-select: none;
 	color: #2C2A29;
 	text-align: left;
+  padding-top: 3px;
 }
 
-.option-container:hover {
-	box-shadow: 0 0 10px #173C9126;
+.option-container {
+  &:hover {
+    box-shadow: 0 0 10px #173C9126;
+  }
 }
