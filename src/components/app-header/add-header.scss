@@ -1,0 +1,29 @@
+.header {
+  background-color: #001E64;
+  color: white;
+  height: 122px;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  box-sizing: border-box;
+
+  &__link-container {
+    display: flex;
+    gap: 80px;
+  }
+
+  &__link {
+    font-size: 32px;
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      border-bottom: 2px solid white;
+    }
+  }
+}
+
+

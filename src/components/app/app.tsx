@@ -1,11 +1,1 @@
-import {BrowserRouter} from 'react-router-dom';
-import './app.css';
-import RoutesComponent from '../routes-component/routes-component';
-
-export default function App() {
-  return (
-    <BrowserRouter>
-      <RoutesComponent />
-    </BrowserRouter>
-  );
-}
+import { BrowserRouter } from 'react-router-dom';import './app.css';import RoutesComponent from '../routes-component/routes-component';import AppHeader from '../app-header/app-header';export default function App() {  return (    <BrowserRouter>      <AppHeader />      <RoutesComponent />    </BrowserRouter>  );}
