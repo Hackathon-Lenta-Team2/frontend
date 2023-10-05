@@ -1,10 +1,12 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import React, { ReactElement, useEffect, useState } from 'react';
 import './add-header.scss';
 import headerLogo from '../../images/header-logo.png';
+import LogoutModal from '../logout-modal/logout-modal';
 
 export default function AppHeader(): ReactElement {
   const [areLinksHidden, setLinksHidden] = useState(true);
+  const [isModalOpened, setModalOpened] = useState(false);
 
   const location = useLocation();
   useEffect(() => {
@@ -15,6 +17,10 @@ export default function AppHeader(): ReactElement {
     }
   }, [location.pathname]);
 
+  function onProfileClick() {
+    setModalOpened(true);
+  }
+
   return (
     <header className='header'>
       <div>
@@ -23,14 +29,21 @@ export default function AppHeader(): ReactElement {
         </Link>
       </div>
       {!areLinksHidden && (
-        <div className='header__link-container'>
-          <Link to='/' className='header__link'>
-            Главная
-          </Link>
-          <Link to='/login' className='header__link'>
-            Иванов А. А.
-          </Link>
-        </div>
+        <>
+          <LogoutModal opened={isModalOpened} setModalOpened={setModalOpened}/>
+          <div className='header__link-container'>
+            <Link to='/' className='header__link'>
+              Главная
+            </Link>
+            <button
+              type='button'
+              className='header__link'
+              onClick={onProfileClick}
+            >
+              Иванов А. А.
+            </button>
+          </div>
+        </>
       )}
     </header>
   );

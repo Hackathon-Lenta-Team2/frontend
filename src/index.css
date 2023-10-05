@@ -2,6 +2,6 @@
 @import url('./vendor/fonts.css');
 @import url('./vendor/_variables.scss');
 
-#root {
+#root, #modal-root {
   font-family: 'Futura', 'Arial', sans-serif;
 }
