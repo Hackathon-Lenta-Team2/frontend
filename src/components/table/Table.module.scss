@@ -1,0 +1,45 @@
+.table {
+  border-collapse: collapse;
+  margin: 0 auto;
+
+  &__headerRow {
+    height: 74px;
+    background-color: var(--blue);
+    color: var(--white-font);
+    font: var(--font-h3-24-110-450);
+
+    th {
+      width: 142px;
+    }
+
+    th:nth-child(1) {
+      width: 308px;
+    }
+
+    th:nth-child(2) {
+      width: 592px;
+      margin-right: auto;
+    }
+  }
+
+  &__headerCell {
+    padding: 0;
+    border: none;
+  }
+
+  &__body {
+    tr:nth-child(even) {
+      background-color: var(--blue-table);
+    }
+  }
+
+  &__bodyRow {
+    height: 62px;
+    font: var(--font-t1-20-110-450);
+  }
+
+  &__bodyCell {
+    padding: 0;
+    border: none;
+  }
+}
