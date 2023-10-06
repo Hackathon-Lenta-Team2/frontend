@@ -2,12 +2,13 @@
   background-color: #001E64;
   color: white;
   height: 122px;
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
   box-sizing: border-box;
+  font-weight: 450;
 
   &__link-container {
     display: flex;
@@ -18,7 +19,12 @@
     font-size: 32px;
     color: white;
     text-decoration: none;
+    border: 0;
+    background-color: transparent;
     border-bottom: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 450;
 
     &:hover {
       border-bottom: 2px solid white;
