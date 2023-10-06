@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import Button from '../components/button/button.tsx';
 import './login.scss';
 import '../components/input.scss';
-import Checkbox from '../components/checkbox/chechbox.tsx';
+import Checkbox from '../components/checkbox/checkbox.tsx';
 
 export default function LoginPage(): ReactElement {
   const [isEmailValid, setEmailValidation] = useState(true);
@@ -44,15 +44,10 @@ export default function LoginPage(): ReactElement {
             required
             minLength='2'
             maxLength='40'
+            placeholder='info@lenta.com'
             onChange={(e) => onFormChange(e, setEmailValidation, setEmailError)}
           />
-          <label
-            className={`floating-label ${
-              (!isEmailEmpty && 'label-on-top') || ''
-            }`}
-          >
-            Электронная почта
-          </label>
+          <label className='label'>Электронная почта</label>
           <span
             className={`message ${(!isEmailValid && 'message__error') || ''}`}
           >
@@ -67,17 +62,12 @@ export default function LoginPage(): ReactElement {
             required
             minLength='6'
             maxLength='20'
+            placeholder='********'
             onChange={(e) =>
               onFormChange(e, setPasswordValidation, setPasswordError)
             }
           />
-          <label
-            className={`floating-label ${
-              (!isPasswordEmpty && 'label-on-top') || ''
-            }`}
-          >
-            Пароль
-          </label>
+          <label className='label'>Пароль</label>
           <span
             className={`message ${
               (!isPasswordValid && 'message__error') || ''
