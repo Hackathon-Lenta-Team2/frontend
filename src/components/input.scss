@@ -2,10 +2,6 @@ $defaulcolor: #003C96;
 $errorcolor: #B9002B;
 $successcolor: #14AE5C;
 
-.number-input {
-	margin-top: 45px;
-}
-
 .input-container {
 	display: block;
 	width: 100%;
@@ -15,13 +11,18 @@ $successcolor: #14AE5C;
 	margin-bottom: 40px;
 	padding-left: 20px;
 	position: relative;
+
+  &__number-input {
+    margin: 40px 0 16px 0;
+  }
 }
 
-.date-label {
+.label {
 	font-size: 14px;
 	position: absolute;
 	top: -28px;
 	left: 20px;
+  color: $defaulcolor;
 }
 
 .date-input-container {
@@ -47,6 +48,11 @@ $successcolor: #14AE5C;
 	box-sizing: border-box;
   font-weight: 450;
 
+  &::placeholder {
+    color: #D3D3D3;
+    font-weight: 450;
+  }
+
 	&:focus {
 		outline: none;
 	}
@@ -60,7 +66,7 @@ $successcolor: #14AE5C;
 	}
 }
 
-.input:focus ~ .floating-label,
+/*.input:focus ~ .floating-label,
 .input:not(:focus) ~ .label-on-top {
 	top: -23px;
 	bottom: 10px;
@@ -78,7 +84,7 @@ $successcolor: #14AE5C;
 	top: 15px;
 	transition: 0.2s ease all;
   font-weight: 450;
-}
+}*/
 
 .input {
 	border: 0;
@@ -92,8 +98,9 @@ $successcolor: #14AE5C;
 	font-size: 20px;
 
 	&::placeholder {
-		color: $defaulcolor;
 		font-size: 20px;
+    color: #D3D3D3;
+    font-weight: 450;
 	}
 
 	&:focus {
@@ -125,7 +132,8 @@ input[type=number] {
 }
 
 .filter-container {
-	margin-bottom: 20px;
+	margin-bottom: 40px;
+  position: relative;
 }
 
 .icon {
@@ -151,6 +159,7 @@ input[type=number] {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-  color: #D3D3D3
+  color: #D3D3D3;
+  font-weight: 450;
 }
 

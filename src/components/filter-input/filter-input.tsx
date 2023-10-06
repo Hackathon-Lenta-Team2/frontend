@@ -197,7 +197,7 @@ export default function FilterInput({ children }): ReactElement {
   }
   return (
     <div className='filter-container'>
-      <span className='filter-header'>{children}</span>
+      <span className='label'>{children}</span>
       <MySelect
         options={colourOptions}
         isMulti
