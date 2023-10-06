@@ -8,7 +8,9 @@ export default function Button({
   type,
   children,
   disabled,
+  onClick,
 }): ReactElement {
+
   let className = 'button ';
   if (style === 'secondary') {
     className += 'button_secondary';
@@ -19,7 +21,7 @@ export default function Button({
   }
 
   return (
-    <button type={type} className={className} disabled={disabled}>
+    <button type={type} className={className} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );
