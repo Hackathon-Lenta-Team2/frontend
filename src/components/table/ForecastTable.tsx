@@ -7,7 +7,12 @@ import styles from './ForecastTable.module.scss';
 export default function Table(): ReactElement {
   const data = useMemo(() => forecastData.data, []);
   const [currentPage, setCurrentPage] = useState(0);
-  const columnsPerPage = 7; // Number of columns to display per page
+
+  const forecastDays = Object.keys(data[0].forecast).length;
+  const columnsPerPage =
+    forecastDays % 2 === 0
+      ? forecastDays / 2
+      : Math.floor(forecastDays / 2) + 1;
 
   const columns: Column[] = useMemo(() => {
     if (data.length === 0) return [];
@@ -36,7 +41,7 @@ export default function Table(): ReactElement {
       }));
 
     return columnsArray.concat(forecastColumns);
-  }, [data, currentPage]);
+  }, [data, currentPage, columnsPerPage]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
@@ -53,21 +58,36 @@ export default function Table(): ReactElement {
     }
   };
 
+  // disabled button classes
+  const backBtnDisabledClass =
+    currentPage === 0 ? styles.pagination__bkBtnDisabled : '';
+  const fwdBtnDisabledClass =
+    currentPage === Math.ceil(columns.length / columnsPerPage) - 1
+      ? styles.pagination__fwdBtnDisabled
+      : '';
+
   return (
     /* eslint-disable react/jsx-props-no-spreading */
-    <div>
-      <button onClick={prevPage} disabled={currentPage === 0} type='button'>
-        Previous
-      </button>
-      <button
-        onClick={nextPage}
-        disabled={
-          currentPage === Math.ceil(columns.length / columnsPerPage) - 1
-        }
-        type='button'
-      >
-        Next
-      </button>
+    <div className={styles.tableContainer}>
+      <div className={styles.pagination}>
+        <button
+          onClick={prevPage}
+          disabled={currentPage === 0}
+          type='button'
+          className={`${styles.pagination__backBtn} ${backBtnDisabledClass}`}
+          aria-label='backBtn'
+        />
+        <button
+          onClick={nextPage}
+          disabled={
+            currentPage === Math.ceil(columns.length / columnsPerPage) - 1
+          }
+          type='button'
+          className={`${styles.pagination__fwdBtn} ${fwdBtnDisabledClass}`}
+          aria-label='fwdBtn'
+        />
+      </div>
+
       <table {...getTableProps()} className={styles.table}>
         <thead>
           {headerGroups.map((headerGroup) => {

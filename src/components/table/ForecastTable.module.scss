@@ -1,3 +1,49 @@
+.tableContainer {
+  position: relative;
+}
+
+.pagination {
+  position: absolute;
+  top: -114px;
+  right: 50px;
+  display: flex;
+  gap: 20px;
+
+  &__backBtn {
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    background-image: url('../../images/pagination-back-btn.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid var(--blue);
+    background-color: var(--white-font);
+  }
+
+  &__fwdBtn {
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    background-image: url('../../images/pagination-fwd-btn.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid var(--blue);
+    background-color: var(--white-font);
+  }
+
+  &__fwdBtnDisabled {
+    background-color: var(--grey-disabled-btn);
+    border-color: var(--grey-disabled-btn);
+    background-image: url('../../images/pagination-fwd-btn-disabled.svg');
+  }
+
+  &__bkBtnDisabled {
+    background-color: var(--grey-disabled-btn);
+    border-color: var(--grey-disabled-btn);
+    background-image: url('../../images/pagination-bk-btn-disabled.svg');
+  }
+}
+
 .table {
   border-collapse: collapse;
   margin: 0 auto;
