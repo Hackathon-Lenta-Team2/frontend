@@ -1,13 +1,13 @@
 import { ReactElement, useMemo, useState } from 'react';
 import { useTable, Column } from 'react-table';
-import formatDate from '../../utils/helpers';
+import { formatDate } from '../../utils/helpers';
 import * as forecastData from '../../utils/mock-forecast.json';
-import styles from './Table.module.scss';
+import styles from './ForecastTable.module.scss';
 
 export default function Table(): ReactElement {
   const data = useMemo(() => forecastData.data, []);
   const [currentPage, setCurrentPage] = useState(0);
-  const columnsPerPage = 5; // Number of columns to display per page
+  const columnsPerPage = 7; // Number of columns to display per page
 
   const columns: Column[] = useMemo(() => {
     if (data.length === 0) return [];
