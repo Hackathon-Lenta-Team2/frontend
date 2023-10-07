@@ -3,13 +3,21 @@ import './button.scss';
 
 // два стиля кнопки (пропс style) - белая это 'secondary', синяя дефолтная, можно не передавать его в пропсы
 // type - тип кнопки (button, submit, etc)
+
+interface IButtonProps {
+  style?: string;
+  type: 'button' | 'submit' | 'reset';
+  children: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}
 export default function Button({
   style,
   type,
   children,
   disabled,
   onClick,
-}): ReactElement {
+}: IButtonProps): ReactElement {
 
   let className = 'button ';
   if (style === 'secondary') {
@@ -21,7 +29,12 @@ export default function Button({
   }
 
   return (
-    <button type={type} className={className} disabled={disabled} onClick={onClick}>
+    <button
+      type={type}
+      className={className}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {children}
     </button>
   );
