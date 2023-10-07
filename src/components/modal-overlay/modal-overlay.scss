@@ -1,8 +1,9 @@
 .overlay {
   display: flex;
+  box-sizing: border-box;
   height: 100%;
   width: 100%;
-  padding: 100px 40px 0 0;
+  padding: 70px 0 0 0;
   justify-content: flex-end;
   align-items: flex-start;
   position: absolute;

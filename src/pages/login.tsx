@@ -1,27 +1,45 @@
-import React, { ReactElement, useState } from 'react';
-import Button from '../components/button/button.tsx';
+import React, { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from '../components/button/button';
 import './login.scss';
 import '../components/input.scss';
-import Checkbox from '../components/checkbox/checkbox.tsx';
+import Checkbox from '../components/checkbox/checkbox';
+import { useDispatch } from '../services/hooks/useDispatch';
+import { fetchLogin } from '../services/async-thunk/auth-thunk';
+import { useSelector } from '../services/hooks/useSelector';
+import { store } from '../services/store';
 
+interface IFormValue {
+  email: string;
+  password: string;
+}
 export default function LoginPage(): ReactElement {
-  const [isEmailValid, setEmailValidation] = useState(true);
-  const [emailError, setEmailError] = useState(' ');
+  const [isEmailValid, setEmailValidation] = useState<boolean>(true);
+  const [emailError, setEmailError] = useState<string>(' ');
 
-  const [isPasswordValid, setPasswordValidation] = useState(true);
-  const [passwordError, setPasswordError] = useState(' ');
+  const [isPasswordValid, setPasswordValidation] = useState<boolean>(true);
+  const [passwordError, setPasswordError] = useState<string>(' ');
 
-  const [form, setValue] = useState({ email: '', password: '' });
+  const [form, setValue] = useState<IFormValue>({ email: '', password: '' });
 
-  const isEmailEmpty = form.email.length === 0;
-  const isPasswordEmpty = form.password.length === 0;
+  const [isChecked, setChecked] = useState<boolean>(false);
+
+  const loginError = useSelector((state) => state.profile.loginError);
+
   const isFormInvalid = !isEmailValid || !emailError;
 
-  const setFormValues = (e) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const setFormValues = (e: ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  function onFormChange(e, setValidation, setErrorMessage) {
+  function onFormChange(
+    e: ChangeEvent<HTMLInputElement>,
+    setValidation: (newValue: boolean) => void,
+    setErrorMessage: (newValue: string) => void
+  ) {
     setFormValues(e);
     if (!e.target.validity.valid) {
       setValidation(false);
@@ -32,18 +50,40 @@ export default function LoginPage(): ReactElement {
     }
   }
 
+  function onCheckboxChange() {
+    setChecked(!isChecked);
+  }
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    dispatch(
+      fetchLogin({
+        email: form.email,
+        password: form.password,
+        isUserSaved: isChecked,
+      })
+    ).then(() => {
+      const isLoginCorrect = store.getState().profile.loginError;
+      if (isLoginCorrect) {
+        console.log('Login error');
+      } else {
+        navigate('/');
+      }
+    });
+  };
+
   return (
     <div className='login'>
       <h2 className='login__header'>Войти</h2>
-      <form name='loginForm'>
+      <form name='loginForm' onSubmit={onSubmit}>
         <div className='input-container'>
           <input
-            className={`input ${(!isEmailValid && 'input__error') || ''}`}
+            className={`input ${((!isEmailValid || loginError) && 'input__error') || ''}`}
             type='email'
             name='email'
             required
-            minLength='2'
-            maxLength='40'
+            minLength={2}
+            maxLength={40}
             placeholder='info@lenta.com'
             onChange={(e) => onFormChange(e, setEmailValidation, setEmailError)}
           />
@@ -56,13 +96,13 @@ export default function LoginPage(): ReactElement {
         </div>
         <div className='input-container'>
           <input
-            className={`input ${(!isPasswordValid && 'input__error') || ''}`}
+            className={`input ${((!isPasswordValid || loginError) && 'input__error') || ''}`}
             type='password'
             name='password'
             required
-            minLength='6'
-            maxLength='20'
-            placeholder='********'
+            minLength={5}
+            maxLength={20}
+            placeholder='*******'
             onChange={(e) =>
               onFormChange(e, setPasswordValidation, setPasswordError)
             }
@@ -76,7 +116,10 @@ export default function LoginPage(): ReactElement {
             {passwordError}
           </span>
         </div>
-        <Checkbox>Запомнить меня</Checkbox>
+        <Checkbox onChange={onCheckboxChange}>Запомнить меня</Checkbox>
+        {loginError && (
+          <span className='login__error'>Неверный логин или пароль</span>
+        )}
         <Button type='submit' disabled={isFormInvalid}>
           Войти
         </Button>

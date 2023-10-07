@@ -4,6 +4,10 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import './logout-modal.scss';
 import CloseIcon from '../../images/multi-val-delete-icon.svg';
 import Button from '../button/button';
+import { useDispatch } from '../../services/hooks/useDispatch';
+import { fetchLogout } from '../../services/async-thunk/auth-thunk';
+import { useSelector } from '../../services/hooks/useSelector';
+import { useNavigate } from 'react-router-dom';
 
 type TModalProps = {
   opened: boolean;
@@ -16,10 +20,16 @@ export default function LogoutModal({
   opened,
   setModalOpened,
 }: TModalProps): ReactElement | null {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onClose = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.stopPropagation();
     setModalOpened(false);
   };
+
+  function onLogoutClick() {
+    dispatch(fetchLogout()).then(() => navigate('/login'));
+  }
 
   if (!opened) return null;
   if (modalRoot === null) return null;
@@ -37,7 +47,9 @@ export default function LogoutModal({
             <img src={CloseIcon} alt='Закрыть' />
           </button>
         </div>
-        <Button type='button'>Выйти</Button>
+        <Button type='button' onClick={onLogoutClick}>
+          Выйти
+        </Button>
       </div>
     </ModalOverlay>,
     modalRoot

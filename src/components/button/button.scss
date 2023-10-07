@@ -30,7 +30,7 @@ $maintext: #FFFFFF;
     &:hover {
       background-color: $disabledcolor;
       color: $maintext;
-      cursor: none;
+      cursor: default;
     }
 	}
 
