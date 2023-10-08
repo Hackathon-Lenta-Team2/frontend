@@ -1,4 +1,5 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
+import {TUser} from "../services/types";
 
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -84,4 +85,16 @@ export function setCookie(name: string, value: string | null, props?: any) {
 export function deleteCookie(name: string) {
   document.cookie = `${name}=; Max-Age=-99999999;`;
   // setCookie(name, null, { expires: -1 });
+}
+
+export const isUserAuthorized = (user: TUser) => Object.keys(user).length > 0;
+
+export function serializeDate(date: Date | null) {
+  if (date === null) return '';
+  return (
+    date.getFullYear() +
+    '-' +
+    (`0${  date.getMonth() + 1}`).slice(-2) + "-" +
+    (`0${  date.getDate()}`).slice(-2)
+  );
 }

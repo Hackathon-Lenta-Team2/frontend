@@ -1,15 +1,16 @@
 import { Navigate } from 'react-router-dom';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { useSelector } from '../../services/hooks/useSelector';
+import { isUserAuthorized } from '../../utils/helpers';
 
 type TProtectedRouteProps = {
   element: ReactElement;
 };
 
-export function ProtectedRoute({
+export default function ProtectedRoute({
   element,
 }: TProtectedRouteProps): ReactElement {
-  const authToken = useSelector((store) => store.profile.authToken);
+  const user = useSelector((store) => store.profile.user);
 
-  return authToken ? element : <Navigate to='/login' />;
+  return isUserAuthorized(user) ? element : <Navigate to='/login' />;
 }
