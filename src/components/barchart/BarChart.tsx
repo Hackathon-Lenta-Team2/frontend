@@ -4,6 +4,8 @@ import 'chart.js/auto';
 import * as forecastData from '../../utils/mock-forecast.json';
 import * as actualData from '../../utils/mock-actual.json';
 import styles from './BarChart.module.scss';
+import ExcelButton from '../excel-button/ExcelButton';
+import FiltersButton from '../filters-button/FiltersButton';
 
 export default function BarChart(): ReactElement {
   // extracting sku and forecast values
@@ -54,6 +56,8 @@ export default function BarChart(): ReactElement {
       },
     },
     responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 3,
     plugins: {
       legend: {
         position: 'bottom' as const,
@@ -102,6 +106,14 @@ export default function BarChart(): ReactElement {
             weight: '450',
           },
           padding: 24,
+          // колбэк работает, но его формально не принимают options (?!)
+          // callback(value: number): string {
+          //   const newthis = this as any;
+          //   if (newthis.getLabelForValue(value).length > 50) {
+          //     return `${newthis.getLabelForValue(value).substring(0, 45)}...`;
+          //   }
+          //   return newthis.getLabelForValue(value);
+          // },
         },
       },
     },
@@ -109,6 +121,10 @@ export default function BarChart(): ReactElement {
 
   return (
     <div className={styles.chartContainer}>
+      <div className={styles.controls}>
+        <ExcelButton />
+        <FiltersButton />
+      </div>
       <div className={styles.chartContainer__title}>
         ТК - {forecastData.data[0].store}
       </div>
