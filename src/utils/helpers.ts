@@ -33,6 +33,13 @@ export function formatDaysWord(days: number) {
   }
 }
 
+export function calculateColumnsPerPage(days: number): number {
+  if (days <= 7) {
+    return 7;
+  }
+  return days % 2 === 0 ? days / 2 : Math.floor(days / 2) + 1;
+}
+
 export const checkAnswer = (res: AxiosResponse) => {
   if (res.status >= 400) {
     throw Error(`Ошибка ${res.status}`);

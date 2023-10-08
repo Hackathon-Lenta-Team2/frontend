@@ -1,11 +1,17 @@
 .tableContainer {
   position: relative;
+  margin-top: 60px;
+}
+
+.controls {
+  position: absolute;
+  top: -114px;
+  right: 0;
+  display: flex;
+  gap: 24px;
 }
 
 .pagination {
-  position: absolute;
-  top: -114px;
-  right: 50px;
   display: flex;
   gap: 20px;
 

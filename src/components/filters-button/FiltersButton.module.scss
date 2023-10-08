@@ -1,0 +1,28 @@
+.btn {
+  width: 284px;
+  height: 54px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white-font);
+  border: 2px solid var(--blue);
+  font: var(--font-t1-20-110-450);
+  color: var(--blue);
+
+  &__arrow {
+    width: 24px;
+    height: 24px;
+    background-image: url('../../images/indicator-icon-down.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__jar {
+    width: 24px;
+    height: 24px;
+    background-image: url('../../images/filter-jar-icon.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
