@@ -84,85 +84,87 @@ export default function ForecastTable({
   return (
     /* eslint-disable react/jsx-props-no-spreading */
     <div className={styles.tableContainer}>
-      <div className={styles.controls}>
-        <ExcelButton />
-        <FiltersButton />
-        <div className={styles.pagination}>
-          <button
-            onClick={prevPage}
-            disabled={currentPage === 0}
-            type='button'
-            className={`${styles.pagination__backBtn} ${backBtnDisabledClass}`}
-            aria-label='backBtn'
-          />
-          <button
-            onClick={nextPage}
-            disabled={
-              currentPage === Math.ceil(columns.length / columnsPerPage) - 1
-            }
-            type='button'
-            className={`${styles.pagination__fwdBtn} ${fwdBtnDisabledClass}`}
-            aria-label='fwdBtn'
-          />
+      <div className={styles.tableWrapper}>
+        <div className={styles.controls}>
+          <ExcelButton />
+          <FiltersButton />
+          <div className={styles.pagination}>
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 0}
+              type='button'
+              className={`${styles.pagination__backBtn} ${backBtnDisabledClass}`}
+              aria-label='backBtn'
+            />
+            <button
+              onClick={nextPage}
+              disabled={
+                currentPage === Math.ceil(columns.length / columnsPerPage) - 1
+              }
+              type='button'
+              className={`${styles.pagination__fwdBtn} ${fwdBtnDisabledClass}`}
+              aria-label='fwdBtn'
+            />
+          </div>
         </div>
+
+        <table {...getTableProps()} className={styles.table}>
+          <thead>
+            {headerGroups.map((headerGroup) => {
+              const { key: headerKey, ...restHeaderProps } =
+                headerGroup.getHeaderGroupProps();
+
+              return (
+                <tr
+                  key={headerKey}
+                  {...restHeaderProps}
+                  className={styles.table__headerRow}
+                >
+                  {headerGroup.headers.map((column) => {
+                    const { key: columnKey, ...restColumnProps } =
+                      column.getHeaderProps();
+
+                    return (
+                      <th
+                        key={columnKey}
+                        {...restColumnProps}
+                        className={styles.table__headerCell}
+                      >
+                        {column.render('Header')}
+                      </th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </thead>
+          <tbody {...getTableBodyProps()} className={styles.table__body}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className={styles.table__bodyRow}
+                  key={row.id}
+                >
+                  {row.cells.map((cell) => {
+                    const { key, ...restCellProps } = cell.getCellProps();
+                    return (
+                      <td
+                        key={key}
+                        {...restCellProps}
+                        className={styles.table__bodyCell}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-
-      <table {...getTableProps()} className={styles.table}>
-        <thead>
-          {headerGroups.map((headerGroup) => {
-            const { key: headerKey, ...restHeaderProps } =
-              headerGroup.getHeaderGroupProps();
-
-            return (
-              <tr
-                key={headerKey}
-                {...restHeaderProps}
-                className={styles.table__headerRow}
-              >
-                {headerGroup.headers.map((column) => {
-                  const { key: columnKey, ...restColumnProps } =
-                    column.getHeaderProps();
-
-                  return (
-                    <th
-                      key={columnKey}
-                      {...restColumnProps}
-                      className={styles.table__headerCell}
-                    >
-                      {column.render('Header')}
-                    </th>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </thead>
-        <tbody {...getTableBodyProps()} className={styles.table__body}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                {...row.getRowProps()}
-                className={styles.table__bodyRow}
-                key={row.id}
-              >
-                {row.cells.map((cell) => {
-                  const { key, ...restCellProps } = cell.getCellProps();
-                  return (
-                    <td
-                      key={key}
-                      {...restCellProps}
-                      className={styles.table__bodyCell}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </div>
     /* eslint-enable react/jsx-props-no-spreading */
   );

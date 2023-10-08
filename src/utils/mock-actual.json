@@ -1,13 +1,13 @@
 {
   "data": [
     {
-      "store": "store2",
+      "store": "store1",
       "sku": "sku1",
       "fact": [
         {
           "date": "2023-09-01",
           "sales_type": 0,
-          "sales_units": 1,
+          "sales_units": 15,
           "sales_units_promo": 4,
           "sales_rub": 6.7,
           "sales_run_promo": 8.9
@@ -133,7 +133,7 @@
         {
           "date": "2023-09-02",
           "sales_type": 0,
-          "sales_units": 2,
+          "sales_units": 24,
           "sales_units_promo": 6,
           "sales_rub": 9.6,
           "sales_run_promo": 3.4
@@ -251,7 +251,7 @@
         {
           "date": "2023-09-02",
           "sales_type": 0,
-          "sales_units": 2,
+          "sales_units": 14,
           "sales_units_promo": 6,
           "sales_rub": 9.6,
           "sales_run_promo": 3.4
@@ -369,7 +369,7 @@
         {
           "date": "2023-09-02",
           "sales_type": 0,
-          "sales_units": 2,
+          "sales_units": 17,
           "sales_units_promo": 6,
           "sales_rub": 9.6,
           "sales_run_promo": 3.4
@@ -487,7 +487,7 @@
         {
           "date": "2023-09-02",
           "sales_type": 0,
-          "sales_units": 2,
+          "sales_units": 27,
           "sales_units_promo": 6,
           "sales_rub": 9.6,
           "sales_run_promo": 3.4
@@ -723,7 +723,7 @@
         {
           "date": "2023-09-02",
           "sales_type": 0,
-          "sales_units": 2,
+          "sales_units": 21,
           "sales_units_promo": 6,
           "sales_rub": 9.6,
           "sales_run_promo": 3.4

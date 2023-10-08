@@ -2,6 +2,10 @@
   position: relative;
   margin-top: 60px;
 }
+.tableWrapper {
+  height: 570px;
+  overflow-y: scroll;
+}
 
 .controls {
   position: absolute;
@@ -15,15 +19,21 @@
   border-collapse: collapse;
   margin: 0 auto;
   width: 1824px;
+  overflow-y: auto;
 
   &__headerRow {
     height: 74px;
     background-color: var(--blue);
     color: var(--white-font);
     font: var(--font-h3-24-110-450);
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 
     th {
-      width: 142px;
+      width: 250px;
+      padding-left: 20px;
     }
 
     th:nth-child(1) {
@@ -45,15 +55,24 @@
     tr:nth-child(even) {
       background-color: var(--blue-table);
     }
+
+    tr:nth-child(even):hover {
+      background-color: var(--light-blue);
+    }
   }
 
   &__bodyRow {
     height: 62px;
     font: var(--font-t1-20-110-450);
+
+    &:hover {
+      background-color: var(--light-blue);
+    }
   }
 
   &__bodyCell {
-    padding: 0;
+    padding: 0 0 0 20px;
     border: none;
+    text-align: left;
   }
 }

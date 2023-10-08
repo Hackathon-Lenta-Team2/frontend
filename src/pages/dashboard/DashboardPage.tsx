@@ -1,13 +1,12 @@
 import { ReactElement } from 'react';
-import FactTable from '../../components/fact-table/FactTable';
-import ForecastTable from '../../components/forecast-table/ForecastTable';
 import ResultsHeading from '../../components/results-heading/ResultsHeading';
 import ResultsTabs from '../../components/results-tabs/ResultsTabs';
-import styles from './TablePage.module.scss';
+import BarChart from '../../components/barchart/BarChart';
+import styles from './DashboardPage.module.scss';
 import * as forecastData from '../../utils/mock-forecast.json';
-import * as salesData from '../../utils/mock-actual.json';
+// import * as salesData from '../../utils/mock-actual.json';
 
-export default function TablePage(): ReactElement {
+export default function DashboardPage(): ReactElement {
   // TODO: change to state
   const isForecast: boolean = false;
 
@@ -18,11 +17,7 @@ export default function TablePage(): ReactElement {
     <div className={styles.tablePage}>
       <ResultsHeading days={days} isForecast={isForecast} />
       <ResultsTabs />
-      {isForecast ? (
-        <ForecastTable forecasts={forecastData.data} />
-      ) : (
-        <FactTable sales={salesData.data} />
-      )}
+      {isForecast ? <div /> : <BarChart />}
     </div>
   );
 }
