@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import '../checkbox/checkbox.scss';
 import makeAnimated from 'react-select/animated';
 import { components, default as ReactSelect, createFilter } from 'react-select';
@@ -100,7 +100,7 @@ function MySelect(props) {
       {...props}
       options={[...props.options]}
       onChange={(selected) => props.onChange(selected)}
-      styles={filterStyles}
+      styles={props.styles}
       {...{
         filterOption: props.filterOptionFunction,
       }}
@@ -186,25 +186,44 @@ const animatedComponents = makeAnimated();
 type TFilterInputProps = {
   children: string;
   data: any;
+  selectedOptions: Array<any>;
   filterOptionFunction?: (candidate: any, input: any) => void;
   dispatchSelectedOption?: any;
+  isRequired?: boolean;
+  isSubmitClicked?: boolean;
 };
 export default function FilterInput({
   children,
+  isRequired,
   data,
+  selectedOptions,
   filterOptionFunction,
   dispatchSelectedOption,
+  isSubmitClicked,
 }: TFilterInputProps): ReactElement {
-  const [selectedOption, setSelectedOption] = useState(null);
+  console.log(`FilterInput: selectedOptions=${selectedOptions}`);
   function handleChange(selected) {
     dispatchSelectedOption(selected.map((item) => item.id));
-    setSelectedOption(selected);
   }
 
+  const styles = { ...filterStyles };
+  if (isSubmitClicked && isRequired && selectedOptions.length === 0) {
+    styles.control = (styles) => ({
+      ...styles,
+      backgroundColor: '#F0FBFF',
+      border: 0,
+      borderRadius: 0,
+      padding: '0 16px 0 8px',
+      height: '56px',
+      boxShadow: 'none',
+      borderBottom: '1px solid #B9002B',
+    });
+  }
   return (
     <div className='filter-container'>
       <span className='label'>{children}</span>
       <MySelect
+        styles={styles}
         options={data}
         isMulti
         closeMenuOnSelect={false}
@@ -219,7 +238,7 @@ export default function FilterInput({
           animatedComponents,
         }}
         onChange={handleChange}
-        value={selectedOption}
+        value={data.filter((item) => (selectedOptions || []).includes(item.id))}
         filterOptionFunction={filterOptionFunction}
       />
     </div>

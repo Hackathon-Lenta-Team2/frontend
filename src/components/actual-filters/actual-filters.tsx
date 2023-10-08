@@ -1,9 +1,9 @@
-import {FormEvent, ReactElement, useState} from 'react';
+import { FormEvent, ReactElement, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
-import styled from 'styled-components';
 import { addDays, subDays } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import FilterInput from '../filter-input/filter-input';
 import Button from '../button/button';
 import './actual-filters.scss';
@@ -12,36 +12,33 @@ import Checkbox from '../checkbox/checkbox';
 import { useSelector } from '../../services/hooks/useSelector';
 import { useDispatch } from '../../services/hooks/useDispatch';
 import { filterSlice } from '../../services/slices/filter-slice';
-
-/* const Styles = styled.div`
-  .react-datepicker__close-icon::before,
-  .react-datepicker__close-icon::after {
-    background-color: transparent;
-    color: #003c96;
-    font-size: 27px;
-    padding-right: 10px;
-    font-weight: 450;
-  }
-`; */
-
-function serializeDate(date: Date | null) {
-  if (date === null) return '';
-  return date.getFullYear() + "-" +
-    ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
-    ("0" + date.getDate()).slice(-2);
-}
+import { fetchGetSales } from '../../services/async-thunk/filter-thunk';
+import { store } from '../../services/store';
 
 export default function ActualFilters(): ReactElement {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  console.log('startDate=' + serializeDate(startDate));
-  console.log(`endDate=${serializeDate(endDate)}`);
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const stores = useSelector((store) => store.filter.stores);
   const groups = useSelector((store) => store.filter.groups);
   const categories = useSelector((store) => store.filter.categories);
   const subcategories = useSelector((store) => store.filter.subcategories);
   const products = useSelector((store) => store.filter.products);
+
+  const selectedStores = useSelector((store) => store.filter.selectedStores);
+  const selectedGroups = useSelector((store) => store.filter.selectedGroups);
+  const selectedCategories = useSelector(
+    (store) => store.filter.selectedCategories
+  );
+  const selectedSubcategories = useSelector(
+    (store) => store.filter.selectedSubcategories
+  );
+  const selectedProducts = useSelector(
+    (store) => store.filter.selectedProducts
+  );
+
+  const [isChecked, setChecked] = useState<boolean>(false);
 
   const userSelectedStoreIds = useSelector(
     (store) => store.filter.selectedStores
@@ -59,6 +56,7 @@ export default function ActualFilters(): ReactElement {
     (store) => store.filter.selectedProducts
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleStoreFilterOption(candidate, input) {
     return (
@@ -111,24 +109,60 @@ export default function ActualFilters(): ReactElement {
     return <p className=''>Загрузка...</p>;
   }
 
-  function handleActualFiltersSubmit(e: FormEvent<HTMLFormElement>): void {
-    e.preventDefault();
+  function onCheckboxChange() {
+    setChecked(!isChecked);
   }
 
+  function handleActualFiltersSubmit(e: FormEvent<HTMLFormElement>): void {
+    e.preventDefault();
+    setIsSubmitClicked(true);
+    if (isChecked) {
+      dispatch(filterSlice.actions.saveToLocalStorage());
+    }
+    dispatch(
+      fetchGetSales({
+        stores: userSelectedStoreIds,
+        skus: userSelectedProductIds,
+        date_after: startDate,
+        date_before: endDate,
+      })
+    ).then(() => {
+      const { getSalesError } = store.getState().filter;
+      if (getSalesError) {
+        console.log('Get sales error');
+      } else {
+        navigate('/results/table');
+      }
+    });
+  }
+
+  const isFormValid = !isSubmitClicked || (selectedStores.length > 0 && selectedProducts.length > 0);
   return (
-    <form name='actual-filters' className='form'>
+    <form
+      name='actual-filters'
+      className='form'
+      onSubmit={handleActualFiltersSubmit}
+    >
       <FilterInput
+        isRequired={true}
+        isSubmitClicked={isSubmitClicked}
         data={stores}
+        selectedOptions={selectedStores}
         dispatchSelectedOption={dispatchStores}
         filterOptionFunction={handleStoreFilterOption}
       >
         Номер ТК
       </FilterInput>
-      <FilterInput data={groups} dispatchSelectedOption={dispatchGroups}>
+      <FilterInput
+        data={groups}
+        selectedOptions={selectedGroups}
+        dispatchSelectedOption={dispatchGroups}
+      >
         Группа товаров
       </FilterInput>
       <FilterInput
         data={categories}
+        selectedOptions={selectedCategories}
         dispatchSelectedOption={dispatchCategories}
         filterOptionFunction={handleCategoryFilterOption}
       >
@@ -136,13 +170,17 @@ export default function ActualFilters(): ReactElement {
       </FilterInput>
       <FilterInput
         data={subcategories}
+        selectedOptions={selectedSubcategories}
         dispatchSelectedOption={dispatchSubcategories}
         filterOptionFunction={handleSubcategoryFilterOption}
       >
         Подкатегория
       </FilterInput>
       <FilterInput
+        isRequired={true}
+        isSubmitClicked={isSubmitClicked}
         data={products}
+        selectedOptions={selectedProducts}
         dispatchSelectedOption={dispatchProducts}
         filterOptionFunction={handleProductFilterOption}
       >
@@ -181,8 +219,10 @@ export default function ActualFilters(): ReactElement {
           />
         </div>
       </div>
-      <Checkbox>Сохранить настройки фильтров</Checkbox>
-      <Button type='submit'>Сформировать</Button>
+      <Checkbox onChange={onCheckboxChange}>
+        Сохранить настройки фильтров
+      </Checkbox>
+      <Button type='submit' disabled={!isFormValid}>Сформировать</Button>
     </form>
   );
 }

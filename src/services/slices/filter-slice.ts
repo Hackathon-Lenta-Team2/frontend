@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchGetCategories,
   fetchGetGroups,
-  fetchGetProducts,
+  fetchGetProducts, fetchGetSales,
   fetchGetStores,
   fetchGetSubcategories,
 } from '../async-thunk/filter-thunk';
 import { TCategory, TGroup, TProduct, TStore, TSubcategory } from '../types';
+import {setCookie} from "../../utils/helpers";
 
 interface IFilterSliceState {
   getStoresError: null | boolean;
@@ -21,7 +22,6 @@ interface IFilterSliceState {
   getSubcategoriesError: null | boolean;
   getSubcategoriesLoading: null | boolean;
   subcategories: Array<TSubcategory>;
-
   getProductsError: null | boolean;
   getProductsLoading: null | boolean;
   products: Array<TProduct>;
@@ -30,6 +30,9 @@ interface IFilterSliceState {
   selectedCategories: Array<string>;
   selectedSubcategories: Array<string>;
   selectedProducts: Array<string>;
+  getSalesError: null | boolean;
+  getSalesLoading: null | boolean;
+  sales: any;
 }
 
 export const filterSlice = createSlice({
@@ -55,6 +58,9 @@ export const filterSlice = createSlice({
     selectedCategories: [],
     selectedSubcategories: [],
     selectedProducts: [],
+    getSalesError: null,
+    getSalesLoading: null,
+    sales: [],
   } as IFilterSliceState,
   reducers: {
     selectStores(state, action) {
@@ -72,6 +78,13 @@ export const filterSlice = createSlice({
     selectProducts(state, action) {
       state.selectedProducts = action.payload;
     },
+    saveToLocalStorage(state) {
+      window.localStorage.setItem('stores', JSON.stringify(state.selectedStores));
+      window.localStorage.setItem('groups', JSON.stringify(state.selectedGroups));
+      window.localStorage.setItem('categories', JSON.stringify(state.selectedCategories));
+      window.localStorage.setItem('subcategories', JSON.stringify(state.selectedSubcategories));
+      window.localStorage.setItem('products', JSON.stringify(state.selectedProducts));
+    }
   },
   extraReducers(builder) {
     builder
@@ -139,6 +152,26 @@ export const filterSlice = createSlice({
       .addCase(fetchGetProducts.rejected, (state) => {
         state.getProductsLoading = false;
         state.getProductsError = true;
+      })
+      .addCase(fetchGetSales.pending, (state) => {
+        state.getSalesLoading = true;
+        state.getSalesError = false;
+      })
+      .addCase(fetchGetSales.fulfilled, (state, action) => {
+        state.getSalesError = false;
+        state.getSalesLoading = false;
+        state.sales = action.payload;
+        // if (action.payload.areActualFiltersSaved) {
+        //   window.localStorage.setItem('stores', JSON.stringify(state.selectedStores));
+        //   window.localStorage.setItem('groups', JSON.stringify(state.selectedGroups));
+        //   window.localStorage.setItem('categories', JSON.stringify(state.selectedCategories));
+        //   window.localStorage.setItem('subcategories', JSON.stringify(state.selectedSubcategories));
+        //   window.localStorage.setItem('products', JSON.stringify(state.selectedProducts));
+        // }
+      })
+      .addCase(fetchGetSales.rejected, (state) => {
+        state.getSalesLoading = false;
+        state.getSalesError = true;
       });
   },
 });

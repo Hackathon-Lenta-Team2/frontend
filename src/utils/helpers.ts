@@ -88,3 +88,13 @@ export function deleteCookie(name: string) {
 }
 
 export const isUserAuthorized = (user: TUser) => Object.keys(user).length > 0;
+
+export function serializeDate(date: Date | null) {
+  if (date === null) return '';
+  return (
+    date.getFullYear() +
+    '-' +
+    (`0${  date.getMonth() + 1}`).slice(-2) + "-" +
+    (`0${  date.getDate()}`).slice(-2)
+  );
+}
