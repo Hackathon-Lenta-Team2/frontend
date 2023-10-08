@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchLogin, fetchLogout } from '../async-thunk/auth-thunk';
+import {fetchGetUser, fetchLogin, fetchLogout} from '../async-thunk/auth-thunk';
 import { deleteCookie, setCookie } from '../../utils/helpers';
 
 interface IAuthSliceState {
@@ -7,7 +7,10 @@ interface IAuthSliceState {
   loginLoading: null | boolean;
   logoutError: null | boolean;
   logoutLoading: null | boolean;
+  userError: null | boolean;
+  userLoading: null | boolean;
   authToken: string;
+  user: any;
 }
 
 export const authSlice = createSlice({
@@ -17,7 +20,10 @@ export const authSlice = createSlice({
     loginLoading: null,
     logoutError: null,
     logoutLoading: null,
+    userError: null,
+    userLoading: null,
     authToken: '',
+    user: {},
   } as IAuthSliceState,
   reducers: {},
   extraReducers(builder) {
@@ -53,6 +59,19 @@ export const authSlice = createSlice({
       .addCase(fetchLogout.rejected.type, (state) => {
         state.logoutLoading = false;
         state.logoutError = true;
+      })
+      .addCase(fetchGetUser.pending, (state) => {
+        state.userLoading = true;
+        state.userError = false;
+      })
+      .addCase(fetchGetUser.fulfilled, (state, action) => {
+        state.userError = false;
+        state.userLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchGetUser.rejected, (state) => {
+        state.userLoading = false;
+        state.userError = true;
       });
   },
 });

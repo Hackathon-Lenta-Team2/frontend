@@ -1,4 +1,5 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
+import {TUser} from "../services/types";
 
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -85,3 +86,5 @@ export function deleteCookie(name: string) {
   document.cookie = `${name}=; Max-Age=-99999999;`;
   // setCookie(name, null, { expires: -1 });
 }
+
+export const isUserAuthorized = (user: TUser) => Object.keys(user).length > 0;

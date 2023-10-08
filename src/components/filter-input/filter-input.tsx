@@ -1,28 +1,14 @@
 import React, { ReactElement, useState } from 'react';
 import '../checkbox/checkbox.scss';
 import makeAnimated from 'react-select/animated';
-import { components, default as ReactSelect } from 'react-select';
+import { components, default as ReactSelect, createFilter } from 'react-select';
 import searchIcon from '../../images/search-icon.svg';
 import downIcon from '../../images/indicator-icon-down.svg';
 import upIcon from '../../images/indicator-icon-up.svg';
 import deleteIcon from '../../images/multi-val-delete-icon.svg';
 import '../input.scss';
 
-// тестовые данные просто для проверки отображения, потом добавлю реальные
-const colourOptions = [
-  { value: 'ocean1', label: 'OceanOceanOceanOceanOceanOcean' },
-  { value: 'blue', label: 'Blue' },
-  { value: 'purple', label: 'Purple' },
-  { value: 'red', label: 'Red' },
-  { value: 'orange', label: 'Orange' },
-  { value: 'yellow', label: 'Yellow' },
-  { value: 'green', label: 'Green' },
-  { value: 'forest', label: 'Forest' },
-  { value: 'slate', label: 'Slate' },
-  { value: 'silver', label: 'Silver' },
-];
-
-const colourStyles: any = {
+const filterStyles: any = {
   control: (styles) => ({
     ...styles,
     backgroundColor: '#F0FBFF',
@@ -59,7 +45,7 @@ const colourStyles: any = {
     margin: 0,
     border: 0,
     backgroundColor: '#F0FBFF',
-    maxHeight: '235px',
+    maxHeight: '280px',
   }),
 
   option: (styles) => ({
@@ -91,6 +77,7 @@ const colourStyles: any = {
   input: (styles) => ({
     ...styles,
     fontSize: '20px',
+    cursor: 'pointer',
   }),
 };
 
@@ -101,7 +88,7 @@ function Placeholder(props) {
     <components.Placeholder {...props}>
       <div className='placeholder'>
         <img src={searchIcon} alt='Поиск' width='18px' height='18px' />
-        {!menuIsOpen && <span>12321fsa-fgh345-daj3</span>}
+        {!menuIsOpen && <span>084a8a9aa8cced9175bd07bc44998e75</span>}
       </div>
     </components.Placeholder>
   );
@@ -113,7 +100,11 @@ function MySelect(props) {
       {...props}
       options={[...props.options]}
       onChange={(selected) => props.onChange(selected)}
-      styles={colourStyles}
+      styles={filterStyles}
+      {...{
+        filterOption: props.filterOptionFunction,
+      }}
+      getOptionValue={(option) => option.id}
     />
   );
 }
@@ -132,7 +123,7 @@ function Option(props) {
               onChange={() => null}
             />
             <span className='checkbox_fake' />
-            <label>{props.label}</label>
+            <label>{props.data.id}</label>
           </label>
         </div>
       </components.Option>
@@ -143,7 +134,13 @@ function Option(props) {
 function MultiValueRemove(props) {
   return (
     <components.MultiValueRemove {...props}>
-      <img src={deleteIcon} alt='Удалить' width='10px' height='10px' className='icon' />
+      <img
+        src={deleteIcon}
+        alt='Удалить'
+        width='10px'
+        height='10px'
+        className='icon'
+      />
     </components.MultiValueRemove>
   );
 }
@@ -165,41 +162,50 @@ function ClearIndicator(props) {
 function DropdownIndicator(props) {
   const { selectProps } = props;
   const { menuIsOpen } = selectProps;
-  return (
-    <>
-      {menuIsOpen ? (
-        <components.DropdownIndicator {...props}>
-          <img src={upIcon} alt='Раскрыть' className='icon' />
-        </components.DropdownIndicator>
-      ) : (
-        <components.DropdownIndicator {...props}>
-          <img src={downIcon} alt='Скрыть' className='icon' />
-        </components.DropdownIndicator>
-      )}
-    </>
+  return menuIsOpen ? (
+    <components.DropdownIndicator {...props}>
+      <img src={upIcon} alt='Раскрыть' className='icon' />
+    </components.DropdownIndicator>
+  ) : (
+    <components.DropdownIndicator {...props}>
+      <img src={downIcon} alt='Скрыть' className='icon' />
+    </components.DropdownIndicator>
   );
 }
 
 function MultiValue(props) {
   return (
     <components.MultiValue {...props}>
-      <span>{props.data.label}</span>
+      <span>{props.data.id}</span>
     </components.MultiValue>
   );
 }
 
 const animatedComponents = makeAnimated();
 
-export default function FilterInput({ children }): ReactElement {
+type TFilterInputProps = {
+  children: string;
+  data: any;
+  filterOptionFunction?: (candidate: any, input: any) => void;
+  dispatchSelectedOption?: any;
+};
+export default function FilterInput({
+  children,
+  data,
+  filterOptionFunction,
+  dispatchSelectedOption,
+}: TFilterInputProps): ReactElement {
   const [selectedOption, setSelectedOption] = useState(null);
   function handleChange(selected) {
+    dispatchSelectedOption(selected.map((item) => item.id));
     setSelectedOption(selected);
   }
+
   return (
     <div className='filter-container'>
       <span className='label'>{children}</span>
       <MySelect
-        options={colourOptions}
+        options={data}
         isMulti
         closeMenuOnSelect={false}
         hideSelectedOptions={false}
@@ -214,6 +220,7 @@ export default function FilterInput({ children }): ReactElement {
         }}
         onChange={handleChange}
         value={selectedOption}
+        filterOptionFunction={filterOptionFunction}
       />
     </div>
   );

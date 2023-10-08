@@ -1,13 +1,12 @@
 import React, { MouseEvent, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import './logout-modal.scss';
 import CloseIcon from '../../images/multi-val-delete-icon.svg';
 import Button from '../button/button';
 import { useDispatch } from '../../services/hooks/useDispatch';
 import { fetchLogout } from '../../services/async-thunk/auth-thunk';
-import { useSelector } from '../../services/hooks/useSelector';
-import { useNavigate } from 'react-router-dom';
 
 type TModalProps = {
   opened: boolean;

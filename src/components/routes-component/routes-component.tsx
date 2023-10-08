@@ -5,7 +5,7 @@ import LoginPage from '../../pages/login';
 import FilterPage from '../../pages/filter';
 import TablePage from '../../pages/table/TablePage';
 import NoResults from '../../pages/no-results';
-import { ProtectedRoute } from '../protected-route/protected-route';
+import ProtectedRoute from '../protected-route/protected-route';
 import DashboardPage from '../../pages/dashboard/DashboardPage';
 
 export default function RoutesComponent(): ReactElement {
@@ -13,9 +13,15 @@ export default function RoutesComponent(): ReactElement {
     <Routes>
       <Route path='/' element={<ProtectedRoute element={<FilterPage />} />} />
       <Route path='/login' element={<LoginPage />} />
-      <Route path='/results/table' element={<ProtectedRoute element={<TablePage />} />} />
-      <Route path='/results/dashboard' element={<ProtectedRoute element={<DashboardPage />} />} />
-      <Route path='/no-results' element={<ProtectedRoute element={<NoResults />} />} />
+      <Route
+        path='/results/table'
+        element={<ProtectedRoute element={<TablePage />} />} />
+      <Route path='/results/dashboard' element={<ProtectedRoute element={<DashboardPage />} />}
+      />
+      <Route
+        path='/no-results'
+        element={<ProtectedRoute element={<NoResults />} />}
+      />
       <Route path='*' element={<NotFound404 />} />
     </Routes>
   );
