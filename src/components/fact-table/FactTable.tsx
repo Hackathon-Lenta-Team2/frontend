@@ -39,7 +39,7 @@ export default function FactTable({ sales }: IFactTableProps): ReactElement {
         sku: item.sku,
         sales_units: salesItem.sales_units,
         forecast: 0,
-        wape: 20,
+        wape: 0.45,
       }))
     );
     return flattened;

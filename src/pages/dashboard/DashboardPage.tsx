@@ -14,19 +14,15 @@ export default function DashboardPage(): ReactElement {
   // get days
   const days: number = Object.keys(forecastData.data[0].forecast).length;
 
-  const data = {
-    sales1: 15,
-    sales2: 20,
-    sales3: 30,
-    sales4: 10,
-    sales5: 70,
-  };
-
   return (
     <div className={styles.tablePage}>
       <ResultsHeading days={days} isForecast={isForecast} />
       <ResultsTabs />
-      {isForecast ? <DoughnutChart data={data} /> : <BarChart />}
+      {isForecast ? (
+        <DoughnutChart forecasts={forecastData.data} />
+      ) : (
+        <BarChart />
+      )}
     </div>
   );
 }

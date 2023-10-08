@@ -9,7 +9,7 @@ import * as salesData from '../../utils/mock-actual.json';
 
 export default function TablePage(): ReactElement {
   // TODO: change to state
-  const isForecast: boolean = false;
+  const isForecast: boolean = true;
 
   // get days
   const days: number = Object.keys(forecastData.data[0].forecast).length;
