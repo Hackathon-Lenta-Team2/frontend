@@ -21,15 +21,14 @@ export default function ForecastFilters(): ReactElement {
 
   const selectedStores = useSelector((state) => state.filter.selectedStores);
   const selectedProducts = useSelector((state) => state.filter.selectedProducts);
+  // const startDate = useSelector((state) => state.filter.forecastStartDate);
+  // const endDate = useSelector((state) => state.filter.forecastEndDate);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isFormValid =
-    !isSubmitClicked ||
-    (selectedStores.length > 0 &&
-      selectedProducts.length > 0 &&
-      isDaysNumberValid);
+  const isFormValid = !isSubmitClicked ||
+    (selectedStores.length > 0 && selectedProducts.length > 0 && isDaysNumberValid);
 
   const setFormValues = (e: ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
@@ -61,6 +60,11 @@ export default function ForecastFilters(): ReactElement {
     setIsSubmitClicked(true);
     if (isChecked) {
       dispatch(filterSlice.actions.saveToLocalStorage());
+      const startDate = new Date('2023-07-18');
+      const endDate = addDays(new Date('2023-07-18'), Number(form.daysNumber));
+      dispatch(filterSlice.actions.saveForecastDatesToLocalStorage({ startDate, endDate }));
+      dispatch(filterSlice.actions.selectForecastStartDate(startDate));
+      dispatch(filterSlice.actions.selectForecastEndDate(endDate));
     }
     dispatch(
       fetchGetForecasts({
@@ -74,7 +78,7 @@ export default function ForecastFilters(): ReactElement {
       if (getForecastsError) {
         console.log('Get forecasts error');
       } else {
-        navigate('/results/table');
+        navigate('/results/table/forecast');
       }
     });
   }

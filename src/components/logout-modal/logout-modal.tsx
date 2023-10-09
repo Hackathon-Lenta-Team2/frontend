@@ -21,7 +21,7 @@ export default function LogoutModal({
 }: TModalProps): ReactElement | null {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onClose = (evt: MouseEvent<HTMLButtonElement>) => {
+  const onClose = (evt: MouseEvent<HTMLButtonElement, globalThis.MouseEvent> | KeyboardEvent | MouseEvent<HTMLElement, globalThis.MouseEvent>) => {
     evt.stopPropagation();
     setModalOpened(false);
   };

@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import {AxiosResponse} from 'axios';
 import {TUser} from "../services/types";
 
 export function formatDate(dateString: string) {
@@ -97,4 +97,8 @@ export function serializeDate(date: Date | null) {
     (`0${  date.getMonth() + 1}`).slice(-2) + "-" +
     (`0${  date.getDate()}`).slice(-2)
   );
+}
+
+export function getToken() {
+  return getCookie('token') || window.sessionStorage.getItem('token');
 }

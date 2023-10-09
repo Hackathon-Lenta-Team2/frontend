@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { baseAuth } from '../../utils/constants';
-import { checkAnswer, getCookie, serializeDate } from '../../utils/helpers';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {baseAuth} from '../../utils/constants';
+import {checkAnswer, getToken, serializeDate} from '../../utils/helpers';
 
-const token = getCookie('token') || window.sessionStorage.getItem('token');
+
 export const getStores = async () => {
   try {
     const res = await axios({
@@ -11,7 +11,7 @@ export const getStores = async () => {
       url: `${baseAuth}/stores`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -45,7 +45,7 @@ export const getGroups = async () => {
       url: `${baseAuth}/groups`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -79,7 +79,7 @@ export const getCategories = async () => {
       url: `${baseAuth}/categories`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -113,7 +113,7 @@ export const getSubcategories = async () => {
       url: `${baseAuth}/subcategories`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -147,7 +147,7 @@ export const getProducts = async () => {
       url: `${baseAuth}/products`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -192,15 +192,15 @@ export const getSales = async ({
       params: {
         store: stores,
         sku: skus,
-        date_after,
-        date_before,
+        date_after: serializeDate(date_after),
+        date_before: serializeDate(date_before),
       },
       paramsSerializer: {
         indexes: null,
       },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -232,8 +232,8 @@ export const fetchGetSales = createAsyncThunk(
       const res = await getSales({
         stores,
         skus,
-        date_after: serializeDate(date_after),
-        date_before: serializeDate(date_before),
+        date_after,
+        date_before,
       });
       return res.data;
     } catch (err) {
@@ -263,15 +263,15 @@ export const getForecasts = async ({
       params: {
         store: stores,
         sku: skus,
-        start_date,
-        end_date,
+        start_date: serializeDate(start_date),
+        end_date: serializeDate(end_date),
       },
       paramsSerializer: {
         indexes: null,
       },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
     return checkAnswer(res);
@@ -303,9 +303,10 @@ export const fetchGetForecasts = createAsyncThunk(
       const res = await getForecasts({
         stores,
         skus,
-        start_date: serializeDate(start_date),
-        end_date: serializeDate(end_date),
+        start_date,
+        end_date,
       });
+      console.log(`fetchGetForecasts=${JSON.stringify(res.data)}`);
       return res.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {

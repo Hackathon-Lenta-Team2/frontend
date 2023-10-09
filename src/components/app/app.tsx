@@ -11,9 +11,10 @@ import {
   fetchGetStores,
   fetchGetSubcategories,
 } from '../../services/async-thunk/filter-thunk';
-import { getCookie } from '../../utils/helpers';
+import { getToken } from '../../utils/helpers';
 import { fetchGetUser } from '../../services/async-thunk/auth-thunk';
 import { filterSlice } from '../../services/slices/filter-slice';
+import Loader from '../loader/loader';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -46,12 +47,30 @@ export default function App() {
         JSON.parse(window.localStorage.getItem('products') || '[]')
       )
     );
+    const factStartDate = window.localStorage.getItem('factStartDate');
+    const factEndDate = window.localStorage.getItem('factEndDate');
+    if (factStartDate) {
+      dispatch(filterSlice.actions.selectFactStartDate(new Date(factStartDate)));
+    }
+    if (factEndDate) {
+      dispatch(filterSlice.actions.selectFactEndDate(new Date(factEndDate)));
+    }
+    const forecastStartDate = window.localStorage.getItem('forecastStartDate');
+    const forecastEndDate = window.localStorage.getItem('forecastEndDate');
+    if (forecastStartDate) {
+      dispatch(filterSlice.actions.selectForecastStartDate(new Date(forecastStartDate)));
+    }
+    if (forecastEndDate) {
+      dispatch(filterSlice.actions.selectForecastEndDate(new Date(forecastEndDate)));
+    }
   }
 
   const init = async () => {
-    if (getCookie('token')) {
-      await dispatch(fetchGetUser());
+    if (!getToken()) {
+      setUserLoaded(true);
+      return;
     }
+    await dispatch(fetchGetUser());
     await dispatch(fetchGetStores());
     await dispatch(fetchGetGroups());
     await dispatch(fetchGetCategories());
@@ -91,7 +110,7 @@ export default function App() {
     /*    <RouterProvider router={router} />  */
     <BrowserRouter>
       <AppHeader />
-      {!isUserLoaded ? <p className=''>Загрузка...</p> : <RoutesComponent />}
+      {!isUserLoaded ? <Loader /> : <RoutesComponent />}
     </BrowserRouter>
   );
 }

@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {fetchGetUser, fetchLogin, fetchLogout} from '../async-thunk/auth-thunk';
-import { deleteCookie, setCookie } from '../../utils/helpers';
+import {deleteCookie, setCookie} from '../../utils/helpers';
 
 interface IAuthSliceState {
   loginError: null | boolean;

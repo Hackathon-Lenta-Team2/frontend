@@ -1,26 +1,25 @@
 import { ReactElement } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import styles from './ResultsTabs.module.scss';
 
 export default function ResultsTabs(): ReactElement {
+  const { dataType } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTableBtnClass =
-    location.pathname === '/results/table'
-      ? styles.resultsTabs__btn_active
-      : '';
-  const activeDashboardBtbClass =
-    location.pathname === '/results/dashboard'
-      ? styles.resultsTabs__btn_active
-      : '';
+  const activeTableBtnClass = location.pathname.includes('/results/table')
+    ? styles.resultsTabs__btn_active
+    : '';
+  const activeDashboardBtbClass = location.pathname.includes('/results/dashboard')
+    ? styles.resultsTabs__btn_active
+    : '';
 
   const handleTableBtnClick = (): void => {
-    navigate('/results/table');
+    navigate(`/results/table/${dataType}`);
   };
 
   const handleDashboardBtnClick = (): void => {
-    navigate('/results/dashboard');
+    navigate(`/results/dashboard/${dataType}`);
   };
 
   return (

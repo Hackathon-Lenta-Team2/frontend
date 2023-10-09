@@ -14,10 +14,12 @@ export default function RoutesComponent(): ReactElement {
       <Route path='/' element={<ProtectedRoute element={<FilterPage />} />} />
       <Route path='/login' element={<LoginPage />} />
       <Route
-        path='/results/table'
+        path='/results/table/:dataType'
         element={<ProtectedRoute element={<TablePage />} />}
       />
-      <Route path='/results/dashboard' element={<ProtectedRoute element={<DashboardPage />} />}
+      <Route
+        path='/results/dashboard/:dataType'
+        element={<ProtectedRoute element={<DashboardPage />} />}
       />
       <Route
         path='/no-results'
