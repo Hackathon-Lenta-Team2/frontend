@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/button/button';
 import './login.scss';
@@ -16,12 +16,9 @@ interface IFormValue {
 export default function LoginPage(): ReactElement {
   const [isEmailValid, setEmailValidation] = useState<boolean>(true);
   const [emailError, setEmailError] = useState<string>(' ');
-
   const [isPasswordValid, setPasswordValidation] = useState<boolean>(true);
   const [passwordError, setPasswordError] = useState<string>(' ');
-
   const [form, setValue] = useState<IFormValue>({ email: '', password: '' });
-
   const [isChecked, setChecked] = useState<boolean>(false);
 
   const loginError = useSelector((state) => state.profile.loginError);
@@ -102,7 +99,7 @@ export default function LoginPage(): ReactElement {
             required
             minLength={5}
             maxLength={20}
-            placeholder='*******'
+            placeholder='*****'
             onChange={(e) =>
               onFormChange(e, setPasswordValidation, setPasswordError)
             }

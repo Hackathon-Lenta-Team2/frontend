@@ -1,8 +1,12 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import './checkbox.scss';
 import { useLocation } from 'react-router-dom';
 
-export default function Checkbox({ children, onChange }): ReactElement {
+interface ICheckboxProps {
+  children: string;
+  onChange: () => void;
+}
+export default function Checkbox({ children, onChange }: ICheckboxProps): ReactElement {
   let className = 'checkbox ';
   const { pathname } = useLocation();
   if (pathname === '/') {

@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactElement } from 'react';
+import { MouseEvent, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';

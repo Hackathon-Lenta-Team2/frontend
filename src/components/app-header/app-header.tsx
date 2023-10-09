@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import React, { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import './add-header.scss';
 import headerLogo from '../../images/header-logo.png';
 import LogoutModal from '../logout-modal/logout-modal';

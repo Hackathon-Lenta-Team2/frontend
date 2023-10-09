@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactElement, useEffect, useState } from 'react';
+import { MouseEvent, ReactElement, useEffect, useState } from 'react';
 import './modal-overlay.scss';
 
 type TModalProps = {

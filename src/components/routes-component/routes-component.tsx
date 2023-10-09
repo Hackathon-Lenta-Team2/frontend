@@ -15,7 +15,8 @@ export default function RoutesComponent(): ReactElement {
       <Route path='/login' element={<LoginPage />} />
       <Route
         path='/results/table'
-        element={<ProtectedRoute element={<TablePage />} />} />
+        element={<ProtectedRoute element={<TablePage />} />}
+      />
       <Route path='/results/dashboard' element={<ProtectedRoute element={<DashboardPage />} />}
       />
       <Route
