@@ -6,4 +6,8 @@
   height: 54px;
   padding: 0;
   border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
