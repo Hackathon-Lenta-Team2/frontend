@@ -1,12 +1,18 @@
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
 import { useTable, Column } from 'react-table';
 import styles from './FactTable.module.scss';
 import ExcelButton from '../excel-button/ExcelButton';
 import FiltersButton from '../filters-button/FiltersButton';
+import RowOverlay from '../row-overlay/RowOverlay';
+
+type OverlayPosition = {
+  x: number;
+  y: number;
+};
 
 type TableRowData = {
-  store: string;
-  sku: string;
+  store_id: string;
+  sku_id: string;
   sales_units: number;
   forecast: number;
   wape: number;
@@ -22,8 +28,8 @@ interface SalesData {
 }
 
 type FactData = {
-  store: string;
-  sku: string;
+  store_id: string;
+  sku_id: string;
   fact: SalesData[];
 };
 
@@ -32,11 +38,30 @@ type IFactTableProps = {
 };
 
 export default function FactTable({ sales }: IFactTableProps): ReactElement {
+  // click on row
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const [overlayPosition, setOverlayPosition] =
+    useState<OverlayPosition | null>(null);
+
+  const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    const x = event.clientX;
+    const y = event.clientY - 220;
+
+    setOverlayPosition({ x, y });
+    setIsOverlayOpen(true);
+  };
+
+  const closeOverlay = () => {
+    setIsOverlayOpen(false);
+    setOverlayPosition(null);
+  };
+
+  // table data
   const data = useMemo(() => {
     const flattened = sales.flatMap((item) =>
       item.fact.map((salesItem) => ({
-        store: item.store,
-        sku: item.sku,
+        store_id: item.store_id,
+        sku_id: item.sku_id,
         sales_units: salesItem.sales_units,
         forecast: 0,
         wape: 0.45,
@@ -52,11 +77,11 @@ export default function FactTable({ sales }: IFactTableProps): ReactElement {
     const columnsArray: Column<TableRowData>[] = [
       {
         Header: 'ТК',
-        accessor: 'store',
+        accessor: 'store_id',
       },
       {
         Header: 'Товар',
-        accessor: 'sku',
+        accessor: 'sku_id',
       },
       {
         Header: 'Факт продаж',
@@ -130,6 +155,7 @@ export default function FactTable({ sales }: IFactTableProps): ReactElement {
                   {...row.getRowProps()}
                   className={styles.table__bodyRow}
                   key={row.id}
+                  onClick={handleRowClick}
                 >
                   {row.cells.map((cell) => {
                     const { key, ...restCellProps } = cell.getCellProps();
@@ -148,6 +174,16 @@ export default function FactTable({ sales }: IFactTableProps): ReactElement {
             })}
           </tbody>
         </table>
+        {isOverlayOpen && overlayPosition && (
+          <RowOverlay
+            onClose={closeOverlay}
+            style={{
+              position: 'absolute',
+              top: `${overlayPosition.y}px`,
+              left: `${overlayPosition.x}px`,
+            }}
+          />
+        )}
       </div>
     </div>
     /* eslint-enable react/jsx-props-no-spreading */

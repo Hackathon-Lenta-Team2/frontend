@@ -37,11 +37,11 @@
     }
 
     th:nth-child(1) {
-      width: 308px;
+      width: 380px;
     }
 
     th:nth-child(2) {
-      width: 592px;
+      width: 500px;
       margin-right: auto;
     }
   }
@@ -58,6 +58,7 @@
 
     tr:nth-child(even):hover {
       background-color: var(--light-blue);
+      cursor: pointer;
     }
   }
 
@@ -67,6 +68,7 @@
 
     &:hover {
       background-color: var(--light-blue);
+      cursor: pointer;
     }
   }
 
