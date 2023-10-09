@@ -97,6 +97,7 @@
 
     tr:nth-child(even):hover {
       background-color: var(--light-blue);
+      cursor: pointer;
     }
   }
 
@@ -106,6 +107,7 @@
 
     &:hover {
       background-color: var(--light-blue);
+      cursor: pointer;
     }
   }
 

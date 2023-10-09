@@ -1,8 +1,8 @@
 {
   "data": [
     {
-      "store": "store1",
-      "sku": "sku1",
+      "store_id": "store1",
+      "sku_id": "sku1",
       "fact": [
         {
           "date": "2023-09-01",
@@ -119,8 +119,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku2",
+      "store_id": "store1",
+      "sku_id": "sku2",
       "fact": [
         {
           "date": "2023-09-01",
@@ -237,8 +237,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku3",
+      "store_id": "store1",
+      "sku_id": "sku3",
       "fact": [
         {
           "date": "2023-09-01",
@@ -355,8 +355,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku4",
+      "store_id": "store1",
+      "sku_id": "sku4",
       "fact": [
         {
           "date": "2023-09-01",
@@ -473,8 +473,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku5",
+      "store_id": "store1",
+      "sku_id": "sku5",
       "fact": [
         {
           "date": "2023-09-01",
@@ -591,8 +591,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku6",
+      "store_id": "store1",
+      "sku_id": "sku6",
       "fact": [
         {
           "date": "2023-09-01",
@@ -709,8 +709,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku7",
+      "store_id": "store1",
+      "sku_id": "sku7",
       "fact": [
         {
           "date": "2023-09-01",
@@ -827,8 +827,8 @@
       ]
     },
     {
-      "store": "store1",
-      "sku": "sku8",
+      "store_id": "store1",
+      "sku_id": "sku8",
       "fact": [
         {
           "date": "2023-09-01",
