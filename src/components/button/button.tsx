@@ -10,6 +10,7 @@ interface IButtonProps {
   children: string;
   disabled?: boolean;
   onClick?: () => void;
+  CSSstyle?: any;
 }
 export default function Button({
   style,
@@ -17,6 +18,7 @@ export default function Button({
   children,
   disabled,
   onClick,
+  CSSstyle
 }: IButtonProps): ReactElement {
   let className = 'button ';
   if (style === 'secondary') {
@@ -33,6 +35,7 @@ export default function Button({
       className={className}
       disabled={disabled}
       onClick={onClick}
+      style={CSSstyle}
     >
       {children}
     </button>
