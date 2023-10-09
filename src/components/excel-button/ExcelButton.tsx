@@ -27,7 +27,8 @@ export default function ExcelButton(): ReactElement {
 
   const handleExportExcel = async () => {
     try {
-      const token = Cookies.get('token');
+      const token =
+        Cookies.get('token') || window.sessionStorage.getItem('token');
 
       if (!token) {
         console.error('Token not found in cookies');

@@ -29,6 +29,10 @@
     background-repeat: no-repeat;
     border: 2px solid var(--blue);
     background-color: var(--white-font);
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__fwdBtn {
@@ -40,6 +44,10 @@
     background-repeat: no-repeat;
     border: 2px solid var(--blue);
     background-color: var(--white-font);
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__fwdBtnDisabled {
@@ -80,7 +88,7 @@
     }
 
     th:nth-child(2) {
-      width: 592px;
+      width: 500px;
       margin-right: auto;
     }
   }

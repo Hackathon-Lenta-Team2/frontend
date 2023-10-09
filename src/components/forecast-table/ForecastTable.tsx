@@ -4,6 +4,12 @@ import { formatDate, calculateColumnsPerPage } from '../../utils/helpers';
 import styles from './ForecastTable.module.scss';
 import ExcelButton from '../excel-button/ExcelButton';
 import FiltersButton from '../filters-button/FiltersButton';
+import RowOverlay from '../row-overlay/RowOverlay';
+
+type OverlayPosition = {
+  x: number;
+  y: number;
+};
 
 interface ForecastData {
   store: string;
@@ -21,6 +27,24 @@ export default function ForecastTable({
 }: IForecastTableProps): ReactElement {
   const data = useMemo(() => forecasts, [forecasts]);
   const [currentPage, setCurrentPage] = useState(0);
+
+  // click on row
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const [overlayPosition, setOverlayPosition] =
+    useState<OverlayPosition | null>(null);
+
+  const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    const x = event.clientX;
+    const y = event.clientY - 220;
+
+    setOverlayPosition({ x, y });
+    setIsOverlayOpen(true);
+  };
+
+  const closeOverlay = () => {
+    setIsOverlayOpen(false);
+    setOverlayPosition(null);
+  };
 
   // calculate columns per page
   const forecastDays: number = Object.keys(data[0].forecast).length;
@@ -146,6 +170,7 @@ export default function ForecastTable({
                   {...row.getRowProps()}
                   className={styles.table__bodyRow}
                   key={row.id}
+                  onClick={handleRowClick}
                 >
                   {row.cells.map((cell) => {
                     const { key, ...restCellProps } = cell.getCellProps();
@@ -164,6 +189,16 @@ export default function ForecastTable({
             })}
           </tbody>
         </table>
+        {isOverlayOpen && overlayPosition && (
+          <RowOverlay
+            onClose={closeOverlay}
+            style={{
+              position: 'absolute',
+              top: `${overlayPosition.y}px`,
+              left: `${overlayPosition.x}px`,
+            }}
+          />
+        )}
       </div>
     </div>
     /* eslint-enable react/jsx-props-no-spreading */

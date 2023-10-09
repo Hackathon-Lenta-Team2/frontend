@@ -9,16 +9,27 @@ import styles from './TablePage.module.scss';
 import * as forecastData from '../../utils/mock-forecast.json';
 
 export default function TablePage(): ReactElement {
-  // TODO: change isForecast to state
-  const isForecast: boolean = false;
-  const sales = useSelector((store: RootState) => store.filter.sales);
+  const sales = useSelector((state: RootState) => state.filter.sales);
+  const startDate = sales.length !== 0 ? sales[0].fact[0].date : '';
+  const endDate =
+    sales.length !== 0 ? sales[0].fact[sales[0].fact.length - 1].date : '';
+
+  const isForecast: boolean = sales.length === 0;
+
+  const forecasts = useSelector((state: RootState) => state.filter.forecasts);
+  console.log(forecasts);
 
   // get days
   const days: number = Object.keys(forecastData.data[0].forecast).length;
 
   return (
     <div className={styles.tablePage}>
-      <ResultsHeading days={days} isForecast={isForecast} />
+      <ResultsHeading
+        days={days}
+        isForecast={isForecast}
+        startDate={startDate}
+        endDate={endDate}
+      />
       <ResultsTabs />
       {isForecast ? (
         <ForecastTable forecasts={forecastData.data} />
