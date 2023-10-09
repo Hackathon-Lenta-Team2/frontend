@@ -1,32 +1,49 @@
-import React, { ReactElement, useState } from 'react';
-import FilterInput from '../filter-input/filter-input.tsx';
-import Checkbox from '../checkbox/checkbox.tsx';
-import Button from '../button/button.tsx';
+import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { addDays } from 'date-fns';
+import Checkbox from '../checkbox/checkbox';
+import Button from '../button/button';
 import './forecast-filters.scss';
 import '../input.scss';
+import FilterInputsComponent from '../filter-inputs-component/filter-inputs-component';
+import { filterSlice } from '../../services/slices/filter-slice';
+import { fetchGetForecasts } from '../../services/async-thunk/filter-thunk';
+import { store } from '../../services/store';
+import { useDispatch } from '../../services/hooks/useDispatch';
+import { useSelector } from '../../services/hooks/useSelector';
 
 export default function ForecastFilters(): ReactElement {
   const [isDaysNumberValid, setDaysNumberValidation] = useState(true);
   const [daysNumberError, setDaysNumberError] = useState('От 1 до 14 дней');
-
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const [isChecked, setChecked] = useState<boolean>(false);
   const [form, setValue] = useState({ daysNumber: '' });
 
-  const isDaysNumberEmpty = form.daysNumber.length === 0;
-  const isFormInvalid = !isDaysNumberValid;
+  const selectedStores = useSelector((state) => state.filter.selectedStores);
+  const selectedProducts = useSelector((state) => state.filter.selectedProducts);
 
-  const setFormValues = (e) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isFormValid =
+    !isSubmitClicked ||
+    (selectedStores.length > 0 &&
+      selectedProducts.length > 0 &&
+      isDaysNumberValid);
+
+  const setFormValues = (e: ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  function onFormChange(e) {
+  function onFormChange(e: ChangeEvent<HTMLInputElement>) {
     setFormValues(e);
     if (!e.target.validity.valid) {
       setDaysNumberValidation(false);
       setDaysNumberError(e.target.validationMessage);
-    } else if (e.target.value > 14) {
+    } else if (Number(e.target.value) > 14) {
       setDaysNumberValidation(false);
       setDaysNumberError('Количество дней не может быть больше 14');
-    } else if (e.target.value < 1) {
+    } else if (Number(e.target.value) < 1) {
       setDaysNumberValidation(false);
       setDaysNumberError('Количество дней не может быть меньше 1');
     } else {
@@ -35,21 +52,46 @@ export default function ForecastFilters(): ReactElement {
     }
   }
 
+  function onCheckboxChange() {
+    setChecked(!isChecked);
+  }
+
+  function handleForecastFiltersSubmit(e: FormEvent<HTMLFormElement>): void {
+    e.preventDefault();
+    setIsSubmitClicked(true);
+    if (isChecked) {
+      dispatch(filterSlice.actions.saveToLocalStorage());
+    }
+    dispatch(
+      fetchGetForecasts({
+        stores: selectedStores,
+        skus: selectedProducts,
+        start_date: new Date('2023-07-18'),
+        end_date: addDays(new Date('2023-07-18'), Number(form.daysNumber)),
+      })
+    ).then(() => {
+      const { getForecastsError } = store.getState().filter;
+      if (getForecastsError) {
+        console.log('Get forecasts error');
+      } else {
+        navigate('/results/table');
+      }
+    });
+  }
+
   return (
-    <form name='forecast-filters' className='form'>
-      <FilterInput>Номер ТК</FilterInput>
-      <FilterInput>Группа товаров</FilterInput>
-      <FilterInput>Категория</FilterInput>
-      <FilterInput>Подкатегория</FilterInput>
-      <FilterInput>Товар</FilterInput>
+    <form
+      name='forecast-filters'
+      className='form'
+      onSubmit={handleForecastFiltersSubmit}
+    >
+      <FilterInputsComponent isSubmitClicked={isSubmitClicked} />
       <div className='input-container input-container__number-input'>
         <input
-          className='input'
+          className={`input ${(!isDaysNumberValid && 'input__error') || ''}`}
           type='number'
           name='daysNumber'
           required
-          minLength='1'
-          maxLength='2'
           placeholder='10'
           onChange={(e) => onFormChange(e)}
         />
@@ -62,8 +104,10 @@ export default function ForecastFilters(): ReactElement {
           {daysNumberError}
         </span>
       </div>
-      <Checkbox>Сохранить настройки фильтров</Checkbox>
-      <Button type='submit' disabled={isFormInvalid}>
+      <Checkbox onChange={onCheckboxChange}>
+        Сохранить настройки фильтров
+      </Checkbox>
+      <Button type='submit' disabled={!isFormValid}>
         Сформировать
       </Button>
     </form>

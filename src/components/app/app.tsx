@@ -65,7 +65,30 @@ export default function App() {
     init();
   }, []);
 
+  /*  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/' element={<ProtectedRoute element={<FilterPage />} />} />
+        <Route
+          path='results/dashboard'
+          element={<ProtectedRoute element={<DashboardPage />} />}
+        />
+        <Route
+          path='results/table'
+          element={<ProtectedRoute element={<TablePage />} />}
+        />
+        <Route
+          path='/no-results'
+          element={<ProtectedRoute element={<NoResults />} />}
+        />
+        <Route path='*' element={<NotFound404 />} />
+      </>
+    )
+  );  */
+
   return (
+    /*    <RouterProvider router={router} />  */
     <BrowserRouter>
       <AppHeader />
       {!isUserLoaded ? <p className=''>Загрузка...</p> : <RoutesComponent />}

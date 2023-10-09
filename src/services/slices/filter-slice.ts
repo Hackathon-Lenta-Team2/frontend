@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchGetCategories,
+  fetchGetForecasts,
   fetchGetGroups,
-  fetchGetProducts, fetchGetSales,
+  fetchGetProducts,
+  fetchGetSales,
   fetchGetStores,
   fetchGetSubcategories,
 } from '../async-thunk/filter-thunk';
 import { TCategory, TGroup, TProduct, TStore, TSubcategory } from '../types';
-import {setCookie} from "../../utils/helpers";
 
 interface IFilterSliceState {
   getStoresError: null | boolean;
@@ -32,7 +33,10 @@ interface IFilterSliceState {
   selectedProducts: Array<string>;
   getSalesError: null | boolean;
   getSalesLoading: null | boolean;
-  sales: any;
+  sales: Array<any>;
+  getForecastsError: null | boolean;
+  getForecastsLoading: null | boolean;
+  forecasts: Array<any>;
 }
 
 export const filterSlice = createSlice({
@@ -61,6 +65,9 @@ export const filterSlice = createSlice({
     getSalesError: null,
     getSalesLoading: null,
     sales: [],
+    getForecastsError: null,
+    getForecastsLoading: null,
+    forecasts: [],
   } as IFilterSliceState,
   reducers: {
     selectStores(state, action) {
@@ -79,12 +86,27 @@ export const filterSlice = createSlice({
       state.selectedProducts = action.payload;
     },
     saveToLocalStorage(state) {
-      window.localStorage.setItem('stores', JSON.stringify(state.selectedStores));
-      window.localStorage.setItem('groups', JSON.stringify(state.selectedGroups));
-      window.localStorage.setItem('categories', JSON.stringify(state.selectedCategories));
-      window.localStorage.setItem('subcategories', JSON.stringify(state.selectedSubcategories));
-      window.localStorage.setItem('products', JSON.stringify(state.selectedProducts));
-    }
+      window.localStorage.setItem(
+        'stores',
+        JSON.stringify(state.selectedStores)
+      );
+      window.localStorage.setItem(
+        'groups',
+        JSON.stringify(state.selectedGroups)
+      );
+      window.localStorage.setItem(
+        'categories',
+        JSON.stringify(state.selectedCategories)
+      );
+      window.localStorage.setItem(
+        'subcategories',
+        JSON.stringify(state.selectedSubcategories)
+      );
+      window.localStorage.setItem(
+        'products',
+        JSON.stringify(state.selectedProducts)
+      );
+    },
   },
   extraReducers(builder) {
     builder
@@ -161,17 +183,23 @@ export const filterSlice = createSlice({
         state.getSalesError = false;
         state.getSalesLoading = false;
         state.sales = action.payload;
-        // if (action.payload.areActualFiltersSaved) {
-        //   window.localStorage.setItem('stores', JSON.stringify(state.selectedStores));
-        //   window.localStorage.setItem('groups', JSON.stringify(state.selectedGroups));
-        //   window.localStorage.setItem('categories', JSON.stringify(state.selectedCategories));
-        //   window.localStorage.setItem('subcategories', JSON.stringify(state.selectedSubcategories));
-        //   window.localStorage.setItem('products', JSON.stringify(state.selectedProducts));
-        // }
       })
       .addCase(fetchGetSales.rejected, (state) => {
         state.getSalesLoading = false;
         state.getSalesError = true;
+      })
+      .addCase(fetchGetForecasts.pending, (state) => {
+        state.getForecastsLoading = true;
+        state.getForecastsError = false;
+      })
+      .addCase(fetchGetForecasts.fulfilled, (state, action) => {
+        state.getForecastsError = false;
+        state.getForecastsLoading = false;
+        state.forecasts = action.payload;
+      })
+      .addCase(fetchGetForecasts.rejected, (state) => {
+        state.getForecastsLoading = false;
+        state.getForecastsError = true;
       });
   },
 });

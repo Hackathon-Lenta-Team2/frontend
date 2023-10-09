@@ -1,15 +1,21 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import Button from '../button/button';
 import './error-page-component.scss';
-import LogoIcon from '../../images/logo.png';
 
+interface IErrorPageComponentProps {
+  logo: string;
+  headerText: string;
+  children: string | ReactNode;
+  buttonText: string;
+  onClick: () => void;
+}
 export default function ErrorPageComponent({
   logo,
   headerText,
   buttonText,
   children,
   onClick,
-}): ReactElement {
+}: IErrorPageComponentProps): ReactElement {
   return (
     <section className='error-section'>
       <div className='error-section__text-container'>

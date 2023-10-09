@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import './button.scss';
 
 // два стиля кнопки (пропс style) - белая это 'secondary', синяя дефолтная, можно не передавать его в пропсы
@@ -18,7 +18,6 @@ export default function Button({
   disabled,
   onClick,
 }: IButtonProps): ReactElement {
-
   let className = 'button ';
   if (style === 'secondary') {
     className += 'button_secondary';

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { baseAuth } from '../../utils/constants';
-import {checkAnswer, getCookie, serializeDate} from '../../utils/helpers';
+import { checkAnswer, getCookie, serializeDate } from '../../utils/helpers';
 
 const token = getCookie('token') || window.sessionStorage.getItem('token');
 export const getStores = async () => {
@@ -174,7 +174,17 @@ export const fetchGetProducts = createAsyncThunk(
   }
 );
 
-export const getSales = async ({ stores, skus, date_after, date_before }) => {
+export const getSales = async ({
+  stores,
+  skus,
+  date_after,
+  date_before,
+}: {
+  stores: Array<string>;
+  skus: Array<string>;
+  date_after: Date | null;
+  date_before: Date | null;
+}) => {
   try {
     const res = await axios({
       method: 'GET',
@@ -224,6 +234,77 @@ export const fetchGetSales = createAsyncThunk(
         skus,
         date_after: serializeDate(date_after),
         date_before: serializeDate(date_before),
+      });
+      return res.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return thunkApi.rejectWithValue(err.message);
+      }
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+
+export const getForecasts = async ({
+  stores,
+  skus,
+  start_date,
+  end_date,
+}: {
+  stores: Array<string>;
+  skus: Array<string>;
+  start_date: Date | null;
+  end_date: Date | null;
+}) => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: `${baseAuth}/forecasts`,
+      params: {
+        store: stores,
+        sku: skus,
+        start_date,
+        end_date,
+      },
+      paramsSerializer: {
+        indexes: null,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    });
+    return checkAnswer(res);
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      return Promise.reject(err.message);
+    }
+    return Promise.reject(err);
+  }
+};
+
+export const fetchGetForecasts = createAsyncThunk(
+  'filters/fetchGetForecasts',
+  async (
+    {
+      stores,
+      skus,
+      start_date,
+      end_date,
+    }: {
+      stores: Array<string>;
+      skus: Array<string>;
+      start_date: Date | null;
+      end_date: Date | null;
+    },
+    thunkApi
+  ) => {
+    try {
+      const res = await getForecasts({
+        stores,
+        skus,
+        start_date: serializeDate(start_date),
+        end_date: serializeDate(end_date),
       });
       return res.data;
     } catch (err) {

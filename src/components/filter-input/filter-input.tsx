@@ -8,8 +8,15 @@ import upIcon from '../../images/indicator-icon-up.svg';
 import deleteIcon from '../../images/multi-val-delete-icon.svg';
 import '../input.scss';
 
+type TStyles = {
+  [name: string]: string;
+};
+
+type TSelectedItem = {
+  id: string;
+};
 const filterStyles: any = {
-  control: (styles) => ({
+  control: (styles: TStyles) => ({
     ...styles,
     backgroundColor: '#F0FBFF',
     border: 0,
@@ -20,19 +27,19 @@ const filterStyles: any = {
     borderBottom: '1px solid #003C96',
   }),
 
-  placeholder: (styles) => ({
+  placeholder: (styles: TStyles) => ({
     ...styles,
     color: '#003C96',
     fontSize: '20px',
   }),
 
-  indicatorSeparator: (styles) => ({
+  indicatorSeparator: (styles: TStyles) => ({
     ...styles,
     backgroundColor: 0,
     width: '4px',
   }),
 
-  menu: (styles) => ({
+  menu: (styles: TStyles) => ({
     ...styles,
     margin: 0,
     border: 0,
@@ -40,7 +47,7 @@ const filterStyles: any = {
     boxShadow: 0,
   }),
 
-  menuList: (styles) => ({
+  menuList: (styles: TStyles) => ({
     ...styles,
     margin: 0,
     border: 0,
@@ -48,7 +55,7 @@ const filterStyles: any = {
     maxHeight: '280px',
   }),
 
-  option: (styles) => ({
+  option: (styles: TStyles) => ({
     ...styles,
     backgroundColor: '#F0FBFF',
     color: 'black',
@@ -57,7 +64,7 @@ const filterStyles: any = {
     },
   }),
 
-  multiValue: (styles) => ({
+  multiValue: (styles: TStyles) => ({
     ...styles,
     backgroundColor: 'white',
     borderRadius: 0,
@@ -65,7 +72,7 @@ const filterStyles: any = {
     maxWidth: '140px',
   }),
 
-  multiValueRemove: (styles) => ({
+  multiValueRemove: (styles: TStyles) => ({
     ...styles,
     borderRadius: 0,
     padding: '0 6px',
@@ -74,7 +81,7 @@ const filterStyles: any = {
     },
   }),
 
-  input: (styles) => ({
+  input: (styles: TStyles) => ({
     ...styles,
     fontSize: '20px',
     cursor: 'pointer',
@@ -185,8 +192,8 @@ const animatedComponents = makeAnimated();
 
 type TFilterInputProps = {
   children: string;
-  data: any;
-  selectedOptions: Array<any>;
+  data: Array<any>;
+  selectedOptions: Array<string>;
   filterOptionFunction?: (candidate: any, input: any) => void;
   dispatchSelectedOption?: any;
   isRequired?: boolean;
@@ -201,14 +208,13 @@ export default function FilterInput({
   dispatchSelectedOption,
   isSubmitClicked,
 }: TFilterInputProps): ReactElement {
-  console.log(`FilterInput: selectedOptions=${selectedOptions}`);
-  function handleChange(selected) {
+  function handleChange(selected: Array<TSelectedItem>) {
     dispatchSelectedOption(selected.map((item) => item.id));
   }
 
   const styles = { ...filterStyles };
   if (isSubmitClicked && isRequired && selectedOptions.length === 0) {
-    styles.control = (styles) => ({
+    styles.control = (styles: TStyles) => ({
       ...styles,
       backgroundColor: '#F0FBFF',
       border: 0,
