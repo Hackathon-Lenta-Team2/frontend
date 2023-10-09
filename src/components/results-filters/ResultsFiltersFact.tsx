@@ -14,6 +14,8 @@ import { useDispatch } from '../../services/hooks/useDispatch';
 import { fetchGetSales } from '../../services/async-thunk/filter-thunk';
 import { store } from '../../services/store';
 import ResultsInputsComponent from '../results-inputs-component/ResultsInputsComponent';
+import Loader from "../loader/loader";
+import { filterSlice } from "../../services/slices/filter-slice";
 
 interface IResultsFiltersFactProps {
   isCalled: boolean;
@@ -22,8 +24,6 @@ interface IResultsFiltersFactProps {
 export default function ResultsFiltersFact({
   isCalled,
 }: IResultsFiltersFactProps): ReactElement {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(isCalled);
   const filtersOpenClass = isOpen ? '' : styles.formContainer_invisible;
@@ -31,6 +31,8 @@ export default function ResultsFiltersFact({
   const stores = useSelector((state) => state.filter.stores);
   const groups = useSelector((state) => state.filter.groups);
   const products = useSelector((state) => state.filter.products);
+  const startDate = useSelector((state) => state.filter.factStartDate);
+  const endDate = useSelector((state) => state.filter.factEndDate);
 
   const selectedStores = useSelector((state) => state.filter.selectedStores);
   const selectedProducts = useSelector(
@@ -38,6 +40,14 @@ export default function ResultsFiltersFact({
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const setStartDate = (date: Date | null) => {
+    dispatch(filterSlice.actions.selectFactStartDate(date));
+  };
+
+  const setEndDate = (date: Date | null) => {
+    dispatch(filterSlice.actions.selectFactEndDate(date));
+  };
 
   function handleActualFiltersSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
@@ -55,7 +65,7 @@ export default function ResultsFiltersFact({
       if (getSalesError) {
         console.log('Get sales error');
       } else {
-        navigate('/results/table');
+        navigate('/results/table/fact');
       }
     });
   }
@@ -69,7 +79,7 @@ export default function ResultsFiltersFact({
     (selectedStores.length > 0 && selectedProducts.length > 0);
 
   if (stores.length === 0 || groups.length === 0 || products.length === 0) {
-    return <p className=''>Загрузка...</p>;
+    return <Loader />;
   }
   return (
     <div className={`${styles.formContainer} ${filtersOpenClass}`}>
@@ -116,7 +126,7 @@ export default function ResultsFiltersFact({
             />
           </div>
         </div>
-        <Button type='submit' disabled={!isFormValid} onClick={handleClose}>
+        <Button type='submit' disabled={!isFormValid} onClick={handleClose} CSSstyle={{transform: 'translateY(-30px)'}}>
           Применить
         </Button>
       </form>

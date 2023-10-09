@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import styles from './ResultsTabs.module.scss';
 
-export default function ResultsTabs(): ReactElement {
+export default function ResultsTabs({ forecasts }): ReactElement {
   const { dataType } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
