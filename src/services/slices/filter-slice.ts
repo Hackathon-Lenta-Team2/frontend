@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
   fetchGetCategories,
   fetchGetForecasts,
@@ -8,7 +8,8 @@ import {
   fetchGetStores,
   fetchGetSubcategories,
 } from '../async-thunk/filter-thunk';
-import { TCategory, TGroup, TProduct, TStore, TSubcategory } from '../types';
+import {TCategory, TGroup, TProduct, TStore, TSubcategory} from '../types';
+import {serializeDate} from "../../utils/helpers";
 
 interface IFilterSliceState {
   getStoresError: null | boolean;
@@ -31,12 +32,21 @@ interface IFilterSliceState {
   selectedCategories: Array<string>;
   selectedSubcategories: Array<string>;
   selectedProducts: Array<string>;
+  factStartDate: Date | null;
+  factEndDate: Date | null;
+  forecastStartDate: Date | null;
+  forecastEndDate: Date | null;
   getSalesError: null | boolean;
   getSalesLoading: null | boolean;
   sales: Array<any>;
   getForecastsError: null | boolean;
   getForecastsLoading: null | boolean;
   forecasts: Array<any>;
+}
+
+interface DateAction {
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 export const filterSlice = createSlice({
@@ -62,6 +72,10 @@ export const filterSlice = createSlice({
     selectedCategories: [],
     selectedSubcategories: [],
     selectedProducts: [],
+    factStartDate: null,
+    factEndDate: null,
+    forecastStartDate: null,
+    forecastEndDate: null,
     getSalesError: null,
     getSalesLoading: null,
     sales: [],
@@ -85,27 +99,32 @@ export const filterSlice = createSlice({
     selectProducts(state, action) {
       state.selectedProducts = action.payload;
     },
+    selectFactStartDate(state, action) {
+      state.factStartDate = action.payload;
+    },
+    selectFactEndDate(state, action) {
+      state.factEndDate = action.payload;
+    },
     saveToLocalStorage(state) {
-      window.localStorage.setItem(
-        'stores',
-        JSON.stringify(state.selectedStores)
-      );
-      window.localStorage.setItem(
-        'groups',
-        JSON.stringify(state.selectedGroups)
-      );
-      window.localStorage.setItem(
-        'categories',
-        JSON.stringify(state.selectedCategories)
-      );
-      window.localStorage.setItem(
-        'subcategories',
-        JSON.stringify(state.selectedSubcategories)
-      );
-      window.localStorage.setItem(
-        'products',
-        JSON.stringify(state.selectedProducts)
-      );
+      window.localStorage.setItem('stores', JSON.stringify(state.selectedStores));
+      window.localStorage.setItem('groups', JSON.stringify(state.selectedGroups));
+      window.localStorage.setItem('categories', JSON.stringify(state.selectedCategories));
+      window.localStorage.setItem('subcategories', JSON.stringify(state.selectedSubcategories));
+      window.localStorage.setItem('products', JSON.stringify(state.selectedProducts));
+    },
+    saveFactDatesToLocalStorage(_, action: PayloadAction<DateAction>) {
+      window.localStorage.setItem('factStartDate', serializeDate(action.payload.startDate));
+      window.localStorage.setItem('factEndDate', serializeDate(action.payload.endDate));
+    },
+    selectForecastStartDate(state, action) {
+      state.forecastStartDate = action.payload;
+    },
+    selectForecastEndDate(state, action) {
+      state.forecastEndDate = action.payload;
+    },
+    saveForecastDatesToLocalStorage(_, action) {
+      window.localStorage.setItem('forecastStartDate', serializeDate(action.payload.startDate));
+      window.localStorage.setItem('forecastEndDate', serializeDate(action.payload.endDate));
     },
   },
   extraReducers(builder) {

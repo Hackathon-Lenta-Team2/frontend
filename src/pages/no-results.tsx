@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {ReactElement} from 'react';
+import {useNavigate} from 'react-router-dom';
 import ErrorPageComponent from '../components/error-page-component/error-page-component';
 import Logo from '../images/logo.png';
 

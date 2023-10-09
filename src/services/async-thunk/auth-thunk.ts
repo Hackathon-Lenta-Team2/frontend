@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { authUrl, baseAuth } from '../../utils/constants';
-import { checkAnswer, getCookie } from '../../utils/helpers';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {authUrl, baseAuth} from '../../utils/constants';
+import {checkAnswer, getCookie} from '../../utils/helpers';
 
 const token = getCookie('token') || window.sessionStorage.getItem('token');
 export const loginUser = async ({

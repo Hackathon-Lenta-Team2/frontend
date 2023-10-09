@@ -16,17 +16,13 @@ import { store } from '../../services/store';
 import FilterInputsComponent from '../filter-inputs-component/filter-inputs-component';
 
 export default function ActualFilters(): ReactElement {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
   const [isChecked, setChecked] = useState<boolean>(false);
 
-  const stores = useSelector((state) => state.filter.stores);
-  const groups = useSelector((state) => state.filter.groups);
-  const products = useSelector((state) => state.filter.products);
-
   const selectedStores = useSelector((state) => state.filter.selectedStores);
   const selectedProducts = useSelector((state) => state.filter.selectedProducts);
+  const startDate = useSelector((state) => state.filter.factStartDate);
+  const endDate = useSelector((state) => state.filter.factEndDate);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -34,11 +30,22 @@ export default function ActualFilters(): ReactElement {
     setChecked(!isChecked);
   }
 
+  const setStartDate = (date: Date | null) => {
+    dispatch(filterSlice.actions.selectFactStartDate(date));
+  };
+
+  const setEndDate = (date: Date | null) => {
+    dispatch(filterSlice.actions.selectFactEndDate(date));
+  };
+
   function handleActualFiltersSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     setIsSubmitClicked(true);
     if (isChecked) {
       dispatch(filterSlice.actions.saveToLocalStorage());
+      if (startDate !== null && endDate !== null) {
+        dispatch(filterSlice.actions.saveFactDatesToLocalStorage({ startDate, endDate }));
+      }
     }
     dispatch(
       fetchGetSales({
@@ -52,7 +59,7 @@ export default function ActualFilters(): ReactElement {
       if (getSalesError) {
         console.log('Get sales error');
       } else {
-        navigate('/results/table');
+        navigate('/results/table/fact');
       }
     });
   }
@@ -61,9 +68,6 @@ export default function ActualFilters(): ReactElement {
     !isSubmitClicked ||
     (selectedStores.length > 0 && selectedProducts.length > 0);
 
-  if (stores.length === 0 || groups.length === 0 || products.length === 0) {
-    return <p className=''>Загрузка...</p>;
-  }
   return (
     <form
       name='actual-filters'

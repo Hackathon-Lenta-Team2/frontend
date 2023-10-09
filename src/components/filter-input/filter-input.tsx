@@ -1,7 +1,7 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import { ReactElement } from 'react';
 import '../checkbox/checkbox.scss';
 import makeAnimated from 'react-select/animated';
-import { components, default as ReactSelect, createFilter } from 'react-select';
+import { components, default as ReactSelect } from 'react-select';
 import searchIcon from '../../images/search-icon.svg';
 import downIcon from '../../images/indicator-icon-down.svg';
 import upIcon from '../../images/indicator-icon-up.svg';
@@ -12,9 +12,11 @@ type TStyles = {
   [name: string]: string;
 };
 
-type TSelectedItem = {
+type TItem = {
   id: string;
 };
+
+type TProps = any;
 const filterStyles: any = {
   control: (styles: TStyles) => ({
     ...styles,
@@ -88,7 +90,7 @@ const filterStyles: any = {
   }),
 };
 
-function Placeholder(props) {
+function Placeholder(props: TProps) {
   const { selectProps } = props;
   const { menuIsOpen } = selectProps;
   return (
@@ -101,7 +103,7 @@ function Placeholder(props) {
   );
 }
 
-function MySelect(props) {
+function MySelect(props: TProps) {
   return (
     <ReactSelect
       {...props}
@@ -111,12 +113,12 @@ function MySelect(props) {
       {...{
         filterOption: props.filterOptionFunction,
       }}
-      getOptionValue={(option) => option.id}
+      getOptionValue={(option: TItem) => option.id}
     />
   );
 }
 
-function Option(props) {
+function Option(props: TProps) {
   return (
     <div>
       <components.Option {...props}>
@@ -138,7 +140,7 @@ function Option(props) {
   );
 }
 
-function MultiValueRemove(props) {
+function MultiValueRemove(props: TProps) {
   return (
     <components.MultiValueRemove {...props}>
       <img
@@ -152,7 +154,7 @@ function MultiValueRemove(props) {
   );
 }
 
-function ClearIndicator(props) {
+function ClearIndicator(props: TProps) {
   return (
     <components.ClearIndicator {...props}>
       <img
@@ -166,7 +168,7 @@ function ClearIndicator(props) {
   );
 }
 
-function DropdownIndicator(props) {
+function DropdownIndicator(props: TProps) {
   const { selectProps } = props;
   const { menuIsOpen } = selectProps;
   return menuIsOpen ? (
@@ -180,7 +182,7 @@ function DropdownIndicator(props) {
   );
 }
 
-function MultiValue(props) {
+function MultiValue(props: TProps) {
   return (
     <components.MultiValue {...props}>
       <span>{props.data.id}</span>
@@ -208,7 +210,7 @@ export default function FilterInput({
   dispatchSelectedOption,
   isSubmitClicked,
 }: TFilterInputProps): ReactElement {
-  function handleChange(selected: Array<TSelectedItem>) {
+  function handleChange(selected: Array<TItem>) {
     dispatchSelectedOption(selected.map((item) => item.id));
   }
 

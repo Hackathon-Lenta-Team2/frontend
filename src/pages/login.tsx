@@ -1,13 +1,13 @@
-import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {ChangeEvent, FormEvent, ReactElement, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Button from '../components/button/button';
 import './login.scss';
 import '../components/input.scss';
 import Checkbox from '../components/checkbox/checkbox';
-import { useDispatch } from '../services/hooks/useDispatch';
-import { fetchLogin } from '../services/async-thunk/auth-thunk';
-import { useSelector } from '../services/hooks/useSelector';
-import { store } from '../services/store';
+import {useDispatch} from '../services/hooks/useDispatch';
+import {fetchGetUser, fetchLogin} from '../services/async-thunk/auth-thunk';
+import {useSelector} from '../services/hooks/useSelector';
+import {store} from '../services/store';
 
 interface IFormValue {
   email: string;
@@ -64,7 +64,7 @@ export default function LoginPage(): ReactElement {
       if (isLoginCorrect) {
         console.log('Login error');
       } else {
-        navigate('/');
+        dispatch(fetchGetUser()).then(() => navigate('/'));
       }
     });
   };
