@@ -17,7 +17,7 @@ export default function BarChart(): ReactElement {
 
   // extracting actual sales values for each sku (in the same order as in forecastSkus)
   const actualValues = forecastSkus.map((sku) => {
-    const storeData = actualData.data.find((data) => data.sku === sku);
+    const storeData = actualData.data.find((data) => data.sku_id === sku);
     if (storeData) {
       return storeData.fact.map((fact) => fact.sales_units);
     }
@@ -106,7 +106,6 @@ export default function BarChart(): ReactElement {
             weight: '450',
           },
           padding: 24,
-          // колбэк работает, но его формально не принимают options (?!)
           // callback(value: number): string {
           //   const newthis = this as any;
           //   if (newthis.getLabelForValue(value).length > 50) {
