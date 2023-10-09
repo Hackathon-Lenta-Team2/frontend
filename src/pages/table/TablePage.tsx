@@ -1,4 +1,4 @@
-import {ReactElement, useEffect} from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../services/types';
 import FactTable from '../../components/fact-table/FactTable';
@@ -12,10 +12,12 @@ import {useDispatch} from '../../services/hooks/useDispatch';
 import Loader from '../../components/loader/loader';
 import {useParams} from 'react-router-dom';
 import NotFound404 from '../not-found';
+import NoResults from "../no-results";
 
 export default function TablePage(): ReactElement {
   const { dataType } = useParams();
   const isForecast = dataType === 'forecast';
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const sales = useSelector((store: RootState) => store.filter.sales);
   const selectedStores = useSelector((store: RootState) => store.filter.selectedStores);
   const selectedProducts = useSelector((store: RootState) => store.filter.selectedProducts);
@@ -40,7 +42,7 @@ export default function TablePage(): ReactElement {
           start_date: forecastStartDate,
           end_date: forecastEndDate,
         })
-      );
+      ).then(() => setIsLoaded(true));
     } else {
       dispatch(
         fetchGetSales({
@@ -49,7 +51,7 @@ export default function TablePage(): ReactElement {
           date_after: factStartDate,
           date_before: factEndDate,
         })
-      );
+      ).then(() => setIsLoaded(true));
     }
   }, []);
 
@@ -58,12 +60,13 @@ export default function TablePage(): ReactElement {
 
   if (dataType !== 'fact' && dataType !== 'forecast') return <NotFound404 />;
 
+  if (isLoaded && (forecasts.length === 0 && sales.length === 0)) return <NoResults />;
   if (isForecast) {
-    if (!forecasts || !(selectedStores && selectedProducts && forecastStartDate  && forecastEndDate)) {
+    if (forecasts.length === 0 || !(selectedStores && selectedProducts && forecastStartDate  && forecastEndDate)) {
       return <Loader />;
     }
   } else {
-    if (!sales || !(selectedStores && selectedProducts && factStartDate && factEndDate)) {
+    if (sales.length === 0 || !(selectedStores && selectedProducts && factStartDate && factEndDate)) {
       return <Loader />;
     }
   }

@@ -1,4 +1,4 @@
-import {ReactElement, useEffect} from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../services/types';
 import ResultsHeading from '../../components/results-heading/ResultsHeading';
@@ -12,10 +12,12 @@ import {useDispatch} from "../../services/hooks/useDispatch";
 import {fetchGetForecasts, fetchGetSales} from "../../services/async-thunk/filter-thunk";
 import NotFound404 from "../not-found";
 import Loader from "../../components/loader/loader";
+import NoResults from "../no-results";
 // import * as salesData from '../../utils/mock-actual.json';
 
 export default function DashboardPage(): ReactElement {
   const { dataType } = useParams();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const sales = useSelector((state: RootState) => state.filter.sales);
   const startSalesDate = sales.length !== 0 ? sales[0].fact[0].date : '';
   const endSalesDate =
@@ -41,7 +43,7 @@ export default function DashboardPage(): ReactElement {
           start_date: forecastStartDate,
           end_date: forecastEndDate,
         })
-      );
+      ).then(() => setIsLoaded(true));
     } else {
       dispatch(
         fetchGetSales({
@@ -50,7 +52,7 @@ export default function DashboardPage(): ReactElement {
           date_after: factStartDate,
           date_before: factEndDate,
         })
-      );
+      ).then(() => setIsLoaded(true));
     }
   }, []);
 
@@ -59,12 +61,14 @@ export default function DashboardPage(): ReactElement {
 
   if (dataType !== 'fact' && dataType !== 'forecast') return <NotFound404 />;
 
+  if (isLoaded && (forecasts.length === 0 && sales.length === 0)) return <NoResults />;
+
   if (isForecast) {
-    if (!forecasts || !(selectedStores && selectedProducts && forecastStartDate  && forecastEndDate)) {
+    if (forecasts.length === 0 || !(selectedStores && selectedProducts && forecastStartDate  && forecastEndDate)) {
       return <Loader />;
     }
   } else {
-    if (!sales || !(selectedStores && selectedProducts && factStartDate && factEndDate)) {
+    if (sales.length === 0 || !(selectedStores && selectedProducts && factStartDate && factEndDate)) {
       return <Loader />;
     }
   }
