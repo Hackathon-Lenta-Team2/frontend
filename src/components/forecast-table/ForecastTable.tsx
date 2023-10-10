@@ -11,11 +11,15 @@ type OverlayPosition = {
   y: number;
 };
 
+type Forecasts = {
+  data: Record<string, number>[]
+}
+
 interface ForecastData {
   store: string;
   sku: string;
   forecast_date: string;
-  forecast_data: Record<string, number>;
+  forecast_data: Forecasts[];
 }
 
 type IForecastTableProps = {
@@ -55,7 +59,7 @@ export default function ForecastTable({
   const columns: Column[] = useMemo(() => {
     if (data.length === 0) return [];
 
-    const forecastDates = Object.keys(data[0].forecast_data);
+    const forecastDates = Object.keys(data[0].forecast_data[0].data);
 
     const columnsArray: Column[] = [
       {
@@ -73,9 +77,9 @@ export default function ForecastTable({
 
     const forecastColumns: Column[] = forecastDates
       .slice(startIndex, endIndex) // Slice columns based on the current page
-      .map((date) => ({
+      .map((date, index) => ({
         Header: formatDate(date),
-        accessor: `forecast.${date}`,
+        accessor: `forecast_data[0].data.${date}`,
       }));
 
     return columnsArray.concat(forecastColumns);
