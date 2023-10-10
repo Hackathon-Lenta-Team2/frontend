@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useState } from 'react';
+import {FormEvent, ReactElement, useEffect, useState} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
@@ -18,6 +18,7 @@ import FilterInputsComponent from '../filter-inputs-component/filter-inputs-comp
 export default function ActualFilters(): ReactElement {
   const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
   const [isChecked, setChecked] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   const selectedStores = useSelector((state) => state.filter.selectedStores);
   const selectedProducts = useSelector((state) => state.filter.selectedProducts);
@@ -25,6 +26,15 @@ export default function ActualFilters(): ReactElement {
   const endDate = useSelector((state) => state.filter.factEndDate);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedStores.length > 0 && selectedProducts.length > 0 &&
+        startDate !== null && endDate !== null) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [selectedStores, selectedProducts, startDate, endDate]);
 
   function onCheckboxChange() {
     setChecked(!isChecked);
@@ -47,26 +57,24 @@ export default function ActualFilters(): ReactElement {
         dispatch(filterSlice.actions.saveFactDatesToLocalStorage({ startDate, endDate }));
       }
     }
-    dispatch(
-      fetchGetSales({
-        stores: selectedStores,
-        skus: selectedProducts,
-        date_after: startDate,
-        date_before: endDate,
-      })
-    ).then(() => {
-      const { getSalesError } = store.getState().filter;
-      if (getSalesError) {
-        console.log('Get sales error');
-      } else {
-        navigate('/results/table/fact');
-      }
-    });
+    if (isFormValid) {
+      dispatch(
+        fetchGetSales({
+          stores: selectedStores,
+          skus: selectedProducts,
+          date_after: startDate,
+          date_before: endDate,
+        })
+      ).then(() => {
+        const { getSalesError } = store.getState().filter;
+        if (getSalesError) {
+          console.log('Get sales error');
+        } else {
+          navigate('/results/table/fact');
+        }
+      });
+    }
   }
-
-  const isFormValid =
-    !isSubmitClicked ||
-    (selectedStores.length > 0 && selectedProducts.length > 0);
 
   return (
     <form
@@ -79,7 +87,7 @@ export default function ActualFilters(): ReactElement {
         <div className='date-input-container'>
           <label className='label'>Дата начала периода</label>
           <DatePicker
-            className='date-input'
+            className={`date-input ${((isSubmitClicked && (startDate === null)) && 'date-input__error') || ''}`}
             filterDate={(d) => {
               return new Date() > d;
             }}
@@ -96,7 +104,7 @@ export default function ActualFilters(): ReactElement {
         <div className='date-input-container'>
           <label className='label'>Дата окончания периода</label>
           <DatePicker
-            className='date-input'
+            className={`date-input ${((isSubmitClicked && (endDate === null)) && 'date-input__error') || ''}`}
             dateFormat='dd.MM.yyyy'
             selected={endDate}
             onChange={(date) => setEndDate(date)}
@@ -111,7 +119,7 @@ export default function ActualFilters(): ReactElement {
       <Checkbox onChange={onCheckboxChange}>
         Сохранить настройки фильтров
       </Checkbox>
-      <Button type='submit' disabled={!isFormValid}>
+      <Button type='submit' disabled={!isFormValid && isSubmitClicked}>
         Сформировать
       </Button>
     </form>
