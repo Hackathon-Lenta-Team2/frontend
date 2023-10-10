@@ -30,8 +30,8 @@ export default function ForecastTable({
   forecasts,
 }: IForecastTableProps): ReactElement {
   const data = useMemo(() => forecasts, [forecasts]);
-  console.log(`data=${JSON.stringify(data)}`);
   const [currentPage, setCurrentPage] = useState(0);
+  console.log(`forecasts=${JSON.stringify(data)}`);
 
   // click on row
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
@@ -77,7 +77,7 @@ export default function ForecastTable({
 
     const forecastColumns: Column[] = forecastDates
       .slice(startIndex, endIndex) // Slice columns based on the current page
-      .map((date, index) => ({
+      .map((date) => ({
         Header: formatDate(date),
         accessor: `forecast_data[0].data.${date}`,
       }));

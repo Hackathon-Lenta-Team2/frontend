@@ -69,9 +69,11 @@ export default function TablePage(): ReactElement {
       ).then(() => setIsLoaded(true));
     }
   }, []);
-
   // get days
-  const days: number = Object.keys(forecasts[0].forecast_data[0].data).length;
+  let days: number = 0;
+  if (forecasts.length > 0) {
+    days = Object.keys(forecasts[0].forecast_data[0].data).length;
+  }
 
   if (dataType !== 'fact' && dataType !== 'forecast') return <NotFound404 />;
 
