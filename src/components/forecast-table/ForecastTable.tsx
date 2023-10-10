@@ -15,7 +15,7 @@ interface ForecastData {
   store: string;
   sku: string;
   forecast_date: string;
-  forecast: Record<string, number>;
+  forecast_data: Record<string, number>;
 }
 
 type IForecastTableProps = {
@@ -26,6 +26,7 @@ export default function ForecastTable({
   forecasts,
 }: IForecastTableProps): ReactElement {
   const data = useMemo(() => forecasts, [forecasts]);
+  console.log(`data=${JSON.stringify(data)}`);
   const [currentPage, setCurrentPage] = useState(0);
 
   // click on row
@@ -47,14 +48,14 @@ export default function ForecastTable({
   };
 
   // calculate columns per page
-  const forecastDays: number = Object.keys(data[0].forecast).length;
+  const forecastDays: number = Object.keys(data[0].forecast_data).length;
   const columnsPerPage = calculateColumnsPerPage(forecastDays);
 
   // get columns
   const columns: Column[] = useMemo(() => {
     if (data.length === 0) return [];
 
-    const forecastDates = Object.keys(data[0].forecast);
+    const forecastDates = Object.keys(data[0].forecast_data);
 
     const columnsArray: Column[] = [
       {

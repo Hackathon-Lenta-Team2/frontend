@@ -13,7 +13,7 @@ interface ForecastData {
   store: string;
   sku: string;
   forecast_date: string;
-  forecast: Record<string, number>;
+  forecast_data: Record<string, number>;
 }
 
 type IDoughnutChartProps = {
