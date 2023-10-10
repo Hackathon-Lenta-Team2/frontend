@@ -83,7 +83,7 @@ export default function DashboardPage(): ReactElement {
       />
       <ResultsTabs />
       {isForecast ? (
-        <DoughnutChart forecasts={forecasts} />
+        <DoughnutChart forecasts={forecastData.data} />
       ) : (
         <BarChart />
       )}
