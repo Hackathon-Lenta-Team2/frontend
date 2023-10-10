@@ -48,6 +48,8 @@ export default function TablePage(): ReactElement {
 
   const dispatch = useDispatch();
 
+  console.log(`forecasts=${JSON.stringify(forecasts)}`);
+
   useEffect(() => {
     if (isForecast) {
       dispatch(
@@ -79,26 +81,7 @@ export default function TablePage(): ReactElement {
 
   if (isLoaded && forecasts.length === 0 && sales.length === 0)
     return <NoResults />;
-  if (isForecast) {
-    if (
-      forecasts.length === 0 ||
-      !(
-        selectedStores &&
-        selectedProducts &&
-        forecastStartDate &&
-        forecastEndDate
-      )
-    ) {
-      return <Loader />;
-    }
-  } else {
-    if (
-      sales.length === 0 ||
-      !(selectedStores && selectedProducts && factStartDate && factEndDate)
-    ) {
-      return <Loader />;
-    }
-  }
+  if (!isLoaded) return <Loader />;
 
   return (
     <div className={styles.tablePage}>
