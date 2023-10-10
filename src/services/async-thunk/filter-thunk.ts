@@ -306,7 +306,6 @@ export const fetchGetForecasts = createAsyncThunk(
         start_date,
         end_date,
       });
-      console.log(`fetchGetForecasts=${JSON.stringify(res.data)}`);
       return res.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {

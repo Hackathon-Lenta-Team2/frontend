@@ -79,9 +79,9 @@ export default function TablePage(): ReactElement {
         startDate={startSalesDate}
         endDate={endSalesDate}
       />
-      <ResultsTabs forecasts={forecasts}/>
+      <ResultsTabs />
       {isForecast ? (
-        <ForecastTable forecasts={forecastData.data} />
+        <ForecastTable forecasts={forecasts} />
       ) : (
         <FactTable sales={sales} />
       )}
